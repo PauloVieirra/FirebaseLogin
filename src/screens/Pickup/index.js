@@ -27,6 +27,13 @@ export default function Pickup() {
       <Image source={require('../../assets/Opwhassh.png')} 
       style={styles.OpcaoWhash}/>
     </TouchableOpacity>
+
+    <TouchableOpacity onPress={handleNavi} >
+      <Image source={require('../../assets/btnmecanico.png')} 
+      style={styles.OpcaoWhash}/>
+    </TouchableOpacity>
+
+
       </View>
    </SafeAreaView>
   

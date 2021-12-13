@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Modal} from 'react-native';
+import {Modal, ScrollView} from 'react-native';
 import styled from "styled-components/native";
 import { MapsAPI } from "../../apigoogle";
 import Geocoder from "react-native-geocoding";
@@ -37,6 +37,9 @@ font-weight:bold;
 `;
 
 const ModalResults = styled.View`
+width:100%;
+height:100%;
+background-color:#fff;
 `;
 
 const ModalResult = styled.TouchableHighlight`
@@ -118,11 +121,13 @@ export default (props) => {
                      <ModalInput value={searchText} onChangeText={t=>setSearchText(t)} autoFocus={true} placeholder={props.title} placeholderTextColor="#999"></ModalInput>
                  </ModalHeader>
                  <ModalResults>
+                     <ScrollView>
                      {results.map((i,k)=>(
                         <ModalResult key={k} onPress={() => handleResultClick(i)}>
                          <ModalResulsText>{i.address}</ModalResulsText>
                         </ModalResult>
                      ))}
+                     </ScrollView>
                  </ModalResults>
             </ModalArea>
 

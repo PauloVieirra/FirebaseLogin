@@ -1,10 +1,11 @@
 import  React, {useEffect, useRef, useState} from 'react';
-import MapView from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Button } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Image } from 'react-native';
 import { MapsAPI } from '../../apigoogle';
 import useApi from '../../services/requestApi';
 import MapViewDirections from 'react-native-maps-directions';
 import AddressModal from '../../componests/modalhome/AddressModal';
+import { useNavigation } from '@react-navigation/native';
 import Geocoder from 'react-native-geocoding';
 import * as Location from 'expo-location';
 import { Viewdet, LoadingArea} from './styled';
@@ -16,6 +17,7 @@ import * as Permissions from 'expo-permissions';
 export default function Home() {
   const map = useRef();
   const api = useApi();
+  const navigation = useNavigation();
   
    const [mapLoc, setMapLoc] = useState({
       center:{
@@ -109,7 +111,7 @@ export default function Home() {
           edgePadding:{
               left:50,
               right:50,
-              bottom:150,
+              bottom:220,
               top:290,
           }
 
@@ -172,7 +174,8 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <>
-      <MapView 
+      <MapView
+       
        ref={map}
        style={{width:'100%', height:'100%'}}
        showsUserLocation={true}
@@ -199,7 +202,12 @@ export default function Home() {
                  onReady={handleDirectionsReady}
                  
                 />
-                 }
+                 } 
+
+                  <Marker
+                    coordinate={{ latitude : -15.837183 , longitude : -48.011885 }}
+                    image={require('../../assets/offparceria.png')}
+                  /> 
 
 
         </MapView>
@@ -281,17 +289,23 @@ export default function Home() {
      </View>
                     
       
-     {toLoc.name && 
+     
        <View style={styles.viewdetail}>
              
              <View style={styles.viewbtn}>
+            
+               <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
+                  <Text style={{color:"#FFF", fontSize:18,}}>Sair</Text>
+                </TouchableOpacity> 
+                {toLoc.name &&
                 <TouchableOpacity style={styles.bntchamar}>
-                  <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar SOS</Text>
-             </TouchableOpacity>  
+                  <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar Reboque</Text>
+                </TouchableOpacity> 
+                } 
              </View>
             
        </View>
-       }
+       
 
       <AddressModal
      title={modaltitle}
@@ -334,8 +348,8 @@ const styles = StyleSheet.create({
   },
 
   viewdetail:{
-      flexDirection: "column",
-      position:'absolute',left:"3%",height:"3%",bottom:30,
+      flexDirection: "row",
+      position:'absolute',left:"3%",height:"3%",bottom:60,
       width:"94%",
       height:100,
   },
@@ -357,18 +371,36 @@ const styles = StyleSheet.create({
       paddingTop:1,
   },
   viewbtn:{
+      flexDirection:'row',
+      justifyContent:'center',
+      borderRadius:30,
       width:"100%",
-      height:"100%",
+      height:50,
+      borderWidth:1,
+      borderColor:'#131313:rgba(0,0,0,0.2)',
+      backgroundColor: '#eee:rgba(0,0,0,0.1)',
   },
 
   bntchamar:{
+      position:'absolute',left:"7%",height:"99%", top:1,
       alignItems:'center',
       justifyContent:'center',
       borderRadius:30,
       backgroundColor:"#000",
-      width:"100%",
-      height:60,
+      marginLeft:45,
+      width:"80%",
+      height:45,
   },
+  bntsair:{
+    position:'absolute',left:"1%",height:"99%", top:1,
+    alignItems:'center',
+    justifyContent:'center',
+    borderRadius:30,
+    backgroundColor:"#000",
+    width:45,
+    height:45,
+},
+
   bntc:{
     alignItems:'center',
     justifyContent:'center',
