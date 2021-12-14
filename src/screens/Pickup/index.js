@@ -1,13 +1,32 @@
-import React from 'react';
-import { Image, View, Dimensions,TouchableOpacity, SafeAreaView } from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import { Image, View,TouchableOpacity, SafeAreaView } from 'react-native';
 import styles from './styled';
+import firebase from '../../services/firebaseConnection';
 import { useNavigation } from '@react-navigation/native';
+import {AuthContext} from '../../contexs/auth';
+import { useState } from 'react/cjs/react.development';
 
 export default function Pickup() {
+  const [usetipo, setUsetipo] = useState ();
+  const {user} = useContext(AuthContext);
+  const uid = user && user.uid;
+
   const navigation = useNavigation();
   const handleNavi = () => {
     alert('Ops, essa funcionalidade ainda não esta disponível');
 }
+
+useEffect(()=>{
+   async function load(){
+    await firebase.database().ref('users').child(uid).on('value', (snapshot)=>{
+      setUsetipo(snapshot.val().usetipo);
+      console.log(usetipo);
+    });
+  }
+  load();
+},[]);
+
+
 
  return (
       <SafeAreaView>
@@ -32,6 +51,12 @@ export default function Pickup() {
       <Image source={require('../../assets/btnmecanico.png')} 
       style={styles.OpcaoWhash}/>
     </TouchableOpacity>
+
+      {usetipo && 
+    <TouchableOpacity  onPress={() => navigation.navigate('CenterAdm')}>
+      <Image source={require('../../assets/parceiros.png')} 
+      style={styles.OpcaoWhash}/>
+    </TouchableOpacity>}
 
 
       </View>

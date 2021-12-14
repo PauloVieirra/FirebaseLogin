@@ -12,7 +12,7 @@ const styles= StyleSheet.create({
 
     container:{
       width:"100%",
-      height:"30%",
+      height:"20%",
       backgroundColor:"#fff",
     },
     containertow:{
@@ -27,22 +27,22 @@ const styles= StyleSheet.create({
 
     OpcaoSos:{
         marginTop:20,
-        width:300,
-        height:80,
+        width:340,
+        height:70,
         borderRadius:12,
     },
 
     OpcaoMarketPlace:{
         marginTop:20,
-        width:300,
-        height:80,
+        width:340,
+        height:70,
         borderRadius:12,
     },
 
     OpcaoWhash:{
         marginTop:20,
-        width:300,
-        height:80,
+        width:340,
+        height:70,
         borderRadius:12,
     },
   });

@@ -1,6 +1,6 @@
 import  React, {useEffect, useRef, useState} from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import { MapsAPI } from '../../apigoogle';
 import useApi from '../../services/requestApi';
 import MapViewDirections from 'react-native-maps-directions';
@@ -10,8 +10,6 @@ import Geocoder from 'react-native-geocoding';
 import * as Location from 'expo-location';
 import { Viewdet, LoadingArea} from './styled';
 import * as Permissions from 'expo-permissions';
-
-
 
 
 export default function Home() {
@@ -29,7 +27,7 @@ export default function Home() {
           zoom:16,
           pitch:0,
           altitude:0,
-          heading:0
+          heading:0,
           
     });
 
@@ -39,18 +37,21 @@ export default function Home() {
     const [requestDistance, setRequestDistance] = useState(0);
      const [requesTime, setRequestTime] = useState(0);
      const [requestPrice, setRequestPrice] = useState(0);
-     
      const [modaltitle, setModalTitle] = useState('');
      const [modalvisible, setModalVisible] = useState (false);
      const [modalField, setModalField] = useState ('');
+     const [especialista, setEspecialista] = useState ();
+     const [espford, setEspford] = useState ();
 
      const [loading, setLoading] = useState (false);
+     
 
     useEffect(() => {
      Geocoder.init(MapsAPI ,{language:'pt-br' });
      getMyCurrentPosition();
       },[]);
 
+      
       useEffect(()=>{
         if(fromLoc.center && toLoc.center) {
              setShowDirections(true);
@@ -84,6 +85,7 @@ export default function Home() {
 
                setMapLoc(loc);
                setFromLoc(loc);
+               
            }
           
            
@@ -92,6 +94,8 @@ export default function Home() {
 
         });
         }
+
+        
 
         const handleFromClick = () =>{
           setModalTitle('Escolha a origem');
@@ -137,6 +141,9 @@ export default function Home() {
             alert(driver.error)
         }
     }
+    const handlepinclick = () => {
+          setToLoc({tokyoRegion});
+    }
 
 
       const handleRequestCancel = () => {
@@ -171,6 +178,40 @@ export default function Home() {
               break;
       }
   } 
+
+     const setmarker= () => {
+            setEspecialista('tokyoRegion');
+     }
+
+     const setbsb= () => {
+              setEspford('bsbRegion');
+}
+     
+       
+
+     const tokyoRegion = { 
+       latitude : -15.829636, 
+       longitude : -47.991948,
+        latitudeDelta : 0.01, 
+        longitudeDelta : 0.01,
+      };
+
+      const bsbRegion = {
+        latitude : -15.839930,
+        longitude : -48.001979,
+         latitudeDelta : 0.01, 
+         longitudeDelta : 0.01, 
+       };
+
+       const bsbRegion2 = {
+        latitude : -15.831438,
+        longitude : -47.998483,
+         latitudeDelta : 0.01, 
+         longitudeDelta : 0.01, 
+       };
+     
+     
+
   return (
     <View style={styles.container}>
       <>
@@ -183,14 +224,38 @@ export default function Home() {
        pitch={true}
        camera={mapLoc}
         >
-
+                 
                  {fromLoc.center &&
                  <MapView.Marker pinColor="#000" coordinate={fromLoc.center}/>
                  } 
                   {toLoc.center &&
                  <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
                  }
+                  {especialista &&
+                  < Marker coordinate = { tokyoRegion }>
+                     <View style={{width:40,height:56, alignItems:'center',padding:1}}>
+                     <Image source={require('../../assets/offparceria.png')}style={{width:38, height:55}}/>
+                     </View>
+                  </Marker>
+                  }
 
+                  {espford &&
+                  < Marker coordinate = { bsbRegion }>
+                    <View style={{width:40,height:56, alignItems:'center',padding:1}}>
+                     <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
+                     </View>
+                  </Marker>
+                  }
+                  {espford &&
+                  < Marker coordinate = { bsbRegion2 }>
+                    <View style={{width:40,height:56, alignItems:'center',padding:1}}>
+                     <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
+                     </View>
+                  </Marker>
+                  }
+
+
+                
                 {showDirections &&
                 <MapViewDirections
                  lineDashPattern={[0]}
@@ -203,14 +268,7 @@ export default function Home() {
                  
                 />
                  } 
-
-                  <Marker
-                    coordinate={{ latitude : -15.837183 , longitude : -48.011885 }}
-                    image={require('../../assets/offparceria.png')}
-                  /> 
-
-
-        </MapView>
+      </MapView>
 
       <View style={styles.Rotacont}>
       
@@ -247,7 +305,7 @@ export default function Home() {
                      </View>
 
                      {!toLoc.name &&
-                         <Text style={{marginLeft:1}}>Você pode clicar aqui para digitar seu destino</Text>
+                         <Text style={{marginLeft:1}}>Você pode clicar aqui para chamar um guincho</Text>
                        }
 
                      {toLoc.name &&
@@ -292,19 +350,36 @@ export default function Home() {
      
        <View style={styles.viewdetail}>
              
-             <View style={styles.viewbtn}>
-            
-               <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
-                  <Text style={{color:"#FFF", fontSize:18,}}>Sair</Text>
-                </TouchableOpacity> 
-                {toLoc.name &&
-                <TouchableOpacity style={styles.bntchamar}>
-                  <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar Reboque</Text>
-                </TouchableOpacity> 
-                } 
-             </View>
+
+          <View style={styles.viewbtnsair}>
+              <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
+                <Text style={{color:"#FFF", fontSize:18,}}>Sair</Text>
+                </TouchableOpacity>
+          </View>
+          {toLoc.name &&
+          <View style={styles.viewbtn}>
+          <TouchableOpacity style={styles.bntchamar}>
+          <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar Reboque</Text>
+          </TouchableOpacity> 
+          </View>
+          } 
             
        </View>
+
+       <ScrollView 
+       horizontal={true}
+       style={styles.viewespecialista}>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+          onPress={setmarker}> 
+            <Image source={require('../../assets/atendimento.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10, backgroundColor:"#eee"}} 
+           onPress={setbsb}> 
+            <Text>SetMarker2</Text>
+          </TouchableOpacity>
+       </ScrollView>
        
 
       <AddressModal
@@ -348,16 +423,23 @@ const styles = StyleSheet.create({
   },
 
   viewdetail:{
-      flexDirection: "row",
-      position:'absolute',left:"3%",height:"3%",bottom:60,
-      width:"94%",
+      flexDirection:'row',
+      position:'absolute',bottom:60,
+      width:"100%",
       height:100,
   },
+  viewespecialista:{
+    flexDirection:'row',
+    position:'absolute',bottom:10,
+    width:"100%",
+    height:90,
+    backgroundColor:'#000:rgba(0,0,0,0.3)',
+},
   viewdetailz:{
     flexDirection: "column",
     position:'absolute',left:"90%",height:"3%",top:110,
-    width:"94%",
-    height:100,
+    width:30,
+    height:30,
 },
 
   viewdetails:{
@@ -371,10 +453,24 @@ const styles = StyleSheet.create({
       paddingTop:1,
   },
   viewbtn:{
+      alignItems:'center',
       flexDirection:'row',
       justifyContent:'center',
       borderRadius:30,
-      width:"100%",
+      marginLeft:10,
+      width:"80%",
+      height:50,
+      borderWidth:1,
+      borderColor:'#131313:rgba(0,0,0,0.2)',
+      backgroundColor: '#eee:rgba(0,0,0,0.1)',
+  },
+
+   viewbtnsair:{
+      flexDirection:'row',
+      justifyContent:'center',
+      width:"15%",
+      borderTopRightRadius:30,
+      borderBottomRightRadius:30,
       height:50,
       borderWidth:1,
       borderColor:'#131313:rgba(0,0,0,0.2)',
@@ -382,17 +478,16 @@ const styles = StyleSheet.create({
   },
 
   bntchamar:{
-      position:'absolute',left:"7%",height:"99%", top:1,
+      position:'absolute', top:1,
       alignItems:'center',
       justifyContent:'center',
       borderRadius:30,
       backgroundColor:"#000",
-      marginLeft:45,
-      width:"80%",
+      width:"98%",
       height:45,
   },
   bntsair:{
-    position:'absolute',left:"1%",height:"99%", top:1,
+    position:'absolute',left:"15%",height:"40%", top:1,
     alignItems:'center',
     justifyContent:'center',
     borderRadius:30,
@@ -477,6 +572,11 @@ LoadingArea:{
   backgroundColor:'#000 rgba(0,0,0,0.5)',
   justifyContent:'center',
   alignItems:'center',
+},
+pinoffice:{
+  width:30,
+  height:30,
+  backgroundColor:"#131213"
 }
 
 });
