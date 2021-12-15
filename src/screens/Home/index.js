@@ -95,7 +95,9 @@ export default function Home() {
         });
         }
 
-        
+        const handlepinclick = () => {
+          setToLoc(tokyoRegion);
+    }
 
         const handleFromClick = () =>{
           setModalTitle('Escolha a origem');
@@ -141,11 +143,7 @@ export default function Home() {
             alert(driver.error)
         }
     }
-    const handlepinclick = () => {
-          setToLoc({tokyoRegion});
-    }
-
-
+    
       const handleRequestCancel = () => {
         setToLoc({});
         setShowDirections(false);
@@ -223,6 +221,7 @@ export default function Home() {
        loadingEnabled={true}
        pitch={true}
        camera={mapLoc}
+       
         >
                  
                  {fromLoc.center &&
@@ -232,7 +231,7 @@ export default function Home() {
                  <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
                  }
                   {especialista &&
-                  < Marker coordinate = { tokyoRegion }>
+                  < Marker coordinate = { tokyoRegion }onPress={handlepinclick}>
                      <View style={{width:40,height:56, alignItems:'center',padding:1}}>
                      <Image source={require('../../assets/offparceria.png')}style={{width:38, height:55}}/>
                      </View>
@@ -240,14 +239,14 @@ export default function Home() {
                   }
 
                   {espford &&
-                  < Marker coordinate = { bsbRegion }>
+                  < Marker coordinate = { bsbRegion } setToLoc={bsbRegion}>
                     <View style={{width:40,height:56, alignItems:'center',padding:1}}>
                      <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
                      </View>
                   </Marker>
                   }
                   {espford &&
-                  < Marker coordinate = { bsbRegion2 }>
+                  < Marker coordinate = { bsbRegion2 } >
                     <View style={{width:40,height:56, alignItems:'center',padding:1}}>
                      <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
                      </View>

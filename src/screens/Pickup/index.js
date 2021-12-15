@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import { Image, View,TouchableOpacity, SafeAreaView } from 'react-native';
+import { Image,Text, View,TouchableOpacity, SafeAreaView } from 'react-native';
 import styles from './styled';
 import firebase from '../../services/firebaseConnection';
 import { useNavigation } from '@react-navigation/native';
@@ -20,7 +20,6 @@ useEffect(()=>{
    async function load(){
     await firebase.database().ref('users').child(uid).on('value', (snapshot)=>{
       setUsetipo(snapshot.val().usetipo);
-      console.log(usetipo);
     });
   }
   load();
@@ -30,7 +29,23 @@ useEffect(()=>{
 
  return (
       <SafeAreaView>
-        <View style={styles.container}></View>
+     
+        <View style={styles.container}>
+          <View style={styles.viewprofileone}>
+             <View style={styles.imgeview}>
+             <Image source={require('../../assets/profileimg.png')}style={{width:"60%", height:"60%"}}/>
+             </View>
+          </View>
+          <View style={styles.viewprofilethow}>
+             <Text>{user.nome}</Text>
+             <Text>{user.email}</Text>
+             <Text>Telefone</Text>
+             <Text>Atualizar dados</Text>
+          <Text>Ford focus</Text>
+          <Text>R-OSK: 10/10/2012</Text>
+
+          </View>
+        </View>
         <View style={styles.containertow}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}> 
         <Image source={require('../../assets/bannergui.png')} 

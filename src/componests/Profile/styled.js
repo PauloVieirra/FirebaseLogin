@@ -45,8 +45,8 @@ const styles= StyleSheet.create({
         borderRadius:12,
     },
     imgeview:{
-       width:"100%",
-       height:"100%",
+       width:60,
+       height:60,
        borderRadius:40,
        marginTop:8,
        marginLeft:8,
