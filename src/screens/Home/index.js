@@ -5,6 +5,7 @@ import { MapsAPI } from '../../apigoogle';
 import useApi from '../../services/requestApi';
 import MapViewDirections from 'react-native-maps-directions';
 import AddressModal from '../../componests/modalhome/AddressModal';
+import { Modalize } from 'react-native-modalize';
 import { useNavigation } from '@react-navigation/native';
 import Geocoder from 'react-native-geocoding';
 import * as Location from 'expo-location';
@@ -42,6 +43,7 @@ export default function Home() {
      const [modalField, setModalField] = useState ('');
      const [especialista, setEspecialista] = useState ();
      const [espford, setEspford] = useState ();
+     const modalizeRef = useRef ();
 
      const [loading, setLoading] = useState (false);
      
@@ -178,7 +180,7 @@ export default function Home() {
   } 
 
      const setmarker= () => {
-            setEspecialista('tokyoRegion');
+           setMapLoc(tokyoRegion);
      }
 
      const setbsb= () => {
@@ -207,6 +209,10 @@ export default function Home() {
          latitudeDelta : 0.01, 
          longitudeDelta : 0.01, 
        };
+
+       function onOpenMod() {
+        modalizeRef.current?.open();
+      }
      
      
 
@@ -231,7 +237,7 @@ export default function Home() {
                  <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
                  }
                   {especialista &&
-                  < Marker coordinate = { tokyoRegion }onPress={handlepinclick}>
+                  < Marker coordinate = { tokyoRegion } onPress={onOpenMod}>
                      <View style={{width:40,height:56, alignItems:'center',padding:1}}>
                      <Image source={require('../../assets/offparceria.png')}style={{width:38, height:55}}/>
                      </View>
@@ -379,6 +385,23 @@ export default function Home() {
             <Text>SetMarker2</Text>
           </TouchableOpacity>
        </ScrollView>
+
+       <Modalize
+        ref={modalizeRef}
+        snapPoint={200}
+        HeaderComponent={
+          <>
+          
+              <TouchableOpacity onPress={onOpenMod}  style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
+                        <Text>Escolher uma foto</Text>
+              </TouchableOpacity>
+             
+         
+           </>
+        }
+       >
+
+       </Modalize>
        
 
       <AddressModal

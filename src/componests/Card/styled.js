@@ -12,10 +12,11 @@ const styles= StyleSheet.create({
 
     container:{
       flexDirection:'row',
-      width:"100%",
+      width:"88%",
       height:"22%",
-      backgroundColor:"#fff",
       marginTop:"10%",
+      backgroundColor:"#CACAFF",
+      borderRadius:12,
     },
     containertow:{
         width:"100%",
@@ -45,8 +46,8 @@ const styles= StyleSheet.create({
         borderRadius:12,
     },
     imgeview:{
-       width:"90%",
-       height:"90%",
+       width:130,
+       height:150,
        borderRadius:40,
        alignItems:'center',
        marginTop:10
@@ -56,6 +57,7 @@ const styles= StyleSheet.create({
       height:"100%",
       marginLeft:5,
       alignItems:'center',
+      
     },
     viewprofilethow:{
       marginTop:18,
@@ -64,9 +66,7 @@ const styles= StyleSheet.create({
     },
     headermodal:{
       width:"100%",
-      height:70,
-      marginTop:100,
-      flexDirection:'row',
+      height:200,
       justifyContent:'center',
       alignItems:'center',
       borderTopLeftRadius:12,
