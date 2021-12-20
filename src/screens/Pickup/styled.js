@@ -83,7 +83,11 @@ const styles= StyleSheet.create({
       borderTopLeftRadius:12,
       borderTopRightRadius:12,
       backgroundColor:"#eee"
-    }
+    },
+    textname:{
+      fontSize:20,
+      color:"#000"
+    },
   });
 
   export default styles;

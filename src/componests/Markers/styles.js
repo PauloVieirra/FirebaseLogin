@@ -46,8 +46,8 @@ const styles= StyleSheet.create({
         borderRadius:12,
     },
     imgeview:{
-       width:"100%",
-       height:"95%",
+       width:130,
+       height:150,
        borderRadius:40,
        alignItems:'center',
        marginTop:10,
@@ -92,15 +92,16 @@ const styles= StyleSheet.create({
       color:"#000"
     },
     textitemns:{
-      fontSize:11,
+      fontSize:12,
       color:"#000,rgba(0,0,0,0.75)"
     },
     btnupdate:{
       alignItems:'center',
       justifyContent:'center',
+      position:'absolute',
+      bottom:1,width:"80%",
       height:25,
       backgroundColor:"#D8F0F8,rgba(255,255,255,0.1)"
-      
     }
 
 

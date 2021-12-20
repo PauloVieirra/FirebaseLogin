@@ -1,14 +1,14 @@
 import React, {useState, useContext} from 'react';
 import { AuthContext } from '../../contexs/auth';
-import { Platform } from 'react-native';
+import { Platform, ScrollView} from 'react-native';
 import {Background,
    Container,
    TextLogin,
-    AreaInput,
-     Input,
-     InputCar,
-     AreaInputCar,
-     BtnLogin} from './styled';
+   AreaInput,
+   Input,
+   InputCar,
+   AreaInputCar,
+   BtnLogin} from './styled';
 
 export default function SignUp() {
 
@@ -33,6 +33,7 @@ export default function SignUp() {
    enabled
    >
      <>
+    
        <Container>
   
            <AreaInput>

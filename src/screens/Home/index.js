@@ -180,15 +180,13 @@ export default function Home() {
   } 
 
      const setmarker= () => {
-           setMapLoc(tokyoRegion);
+           setEspecialista('tokyoRegion');
      }
 
      const setbsb= () => {
               setEspford('bsbRegion');
 }
      
-       
-
      const tokyoRegion = { 
        latitude : -15.829636, 
        longitude : -47.991948,
@@ -213,9 +211,7 @@ export default function Home() {
        function onOpenMod() {
         modalizeRef.current?.open();
       }
-     
-     
-
+      
   return (
     <View style={styles.container}>
       <>
@@ -377,13 +373,40 @@ export default function Home() {
 
           <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
           onPress={setmarker}> 
-            <Image source={require('../../assets/atendimento.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+            <Image source={require('../../assets/Especialistas/especijac.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10, backgroundColor:"#eee"}} 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
            onPress={setbsb}> 
-            <Text>SetMarker2</Text>
+            <Image source={require('../../assets/Especialistas/especiford.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+           onPress={setbsb}> 
+            <Image source={require('../../assets/Especialistas/especiafiat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+           onPress={setbsb}> 
+            <Image source={require('../../assets/Especialistas/especibmwt.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+           onPress={setbsb}> 
+            <Image source={require('../../assets/Especialistas/especicitroen.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+           onPress={setbsb}> 
+            <Image source={require('../../assets/Especialistas/especihondat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
+           onPress={setbsb}> 
+            <Image source={require('../../assets/Especialistas/especipeogeot.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          </TouchableOpacity>
+
+
        </ScrollView>
 
        <Modalize
@@ -392,7 +415,7 @@ export default function Home() {
         HeaderComponent={
           <>
           
-              <TouchableOpacity onPress={onOpenMod}  style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
+              <TouchableOpacity onPress={handlepinclick}  style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
                         <Text>Escolher uma foto</Text>
               </TouchableOpacity>
              
@@ -455,7 +478,7 @@ const styles = StyleSheet.create({
     position:'absolute',bottom:10,
     width:"100%",
     height:90,
-    backgroundColor:'#000:rgba(0,0,0,0.3)',
+    backgroundColor:'#000:rgba(0,0,0,0.1)',
 },
   viewdetailz:{
     flexDirection: "column",
