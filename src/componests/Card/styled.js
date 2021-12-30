@@ -14,7 +14,8 @@ const styles= StyleSheet.create({
       flexDirection:'row',
       width:"88%",
       height:"22%",
-      marginTop:"10%",
+      marginTop:"5%",
+      marginBottom:"5%",
       backgroundColor:"#CACAFF",
       borderRadius:12,
     },
@@ -74,7 +75,7 @@ const styles= StyleSheet.create({
       alignItems:'center',
       borderTopLeftRadius:12,
       borderTopRightRadius:12,
-      backgroundColor:"#eee"
+      backgroundColor:"#eee",
     },
     headermodalon:{
       width:"100%",
@@ -100,8 +101,45 @@ const styles= StyleSheet.create({
       justifyContent:'center',
       height:25,
       backgroundColor:"#D8F0F8,rgba(255,255,255,0.1)"
+      },
+     Box:{
+       alignItems:"center",
+       justifyContent:'center',
+       width:"98%",
+       height:"98%",
+       margin:"1%",
+       backgroundColor:"#000,rgba(0,0,0,0.5)",
+     },
+     boxCard:{ 
+        flexDirection:'row',
+        borderRadius:12,
+        width:680,
+        height:330, 
+        backgroundColor:"#fff",
+        rotation:90, 
+        alignItems:'center',
+     },
+     boxCardOne:{
+       marginLeft:20,
+       height:330, 
+       alignItems:'center',
+       backgroundColor:"#eee"
+     },
+     boxCardthow:{
+      width:200,
+      height:330,
+      backgroundColor:"#eee"
+
+
+    },
+    boxCardthree:{
+      flex:1,
+      height:330, 
+      alignItems:'center',
+      marginTop:30,
       
-    }
+    }   
+
 
 
 

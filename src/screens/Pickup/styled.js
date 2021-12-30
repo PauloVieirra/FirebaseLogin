@@ -22,6 +22,7 @@ const styles= StyleSheet.create({
         height:"70%",
         backgroundColor:"#eee",
         alignItems:'center',
+        justifyContent:'center',
       },
 
     OpcaoSos:{

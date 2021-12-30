@@ -1,12 +1,11 @@
 import 'react-native-gesture-handler';
-import * as Location from 'expo-location'
 import React from 'react';
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthProvider from './src/contexs/auth';
-import firebase from './src/services/firebaseConnection';
+import Routes from './src/routes';
 
- import Routes from './src/routes';
- console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
 
 
 export default function App() {

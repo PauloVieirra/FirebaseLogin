@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import { AuthContext } from '../../contexs/auth';
-import { Platform, ScrollView} from 'react-native';
+import { Platform, Text} from 'react-native';
 import {Background,
    Container,
    TextLogin,
@@ -35,7 +35,7 @@ export default function SignUp() {
      <>
     
        <Container>
-  
+           <Text>Dados de acesso</Text>
            <AreaInput>
            <Input
            placeholder="Nome"
@@ -59,6 +59,41 @@ export default function SignUp() {
            onChangeText={(text) => setPassword(text)}
            />
            </AreaInput>
+
+           <Text>Dados pessoais</Text>
+
+           <AreaInput>
+           <Input
+           placeholder="Sobrenome"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={nome}
+           onChangeText={(text) => setNome(text)}
+           />
+           <Input
+           placeholder="RG OU CPF"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={email}
+           onChangeText={(text) => setEmail(text)}
+           />
+           <Input
+           placeholder="Cidade"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={email}
+           onChangeText={(text) => setEmail(text)}
+           />
+           <Input
+           placeholder="Bairro"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={email}
+           onChangeText={(text) => setEmail(text)}
+           />
+           </AreaInput>
+
+           <Text>Dados do veículo</Text>
 
            <AreaInputCar>
            <InputCar

@@ -32,10 +32,10 @@ export default function Home() {
           
     });
 
-    const [fromLoc, setFromLoc] = useState({});
-    const [toLoc, setToLoc] = useState({});
-    const [showDirections, setShowDirections] = useState(false);
-    const [requestDistance, setRequestDistance] = useState(0);
+    const  [fromLoc, setFromLoc] = useState({});
+    const  [toLoc, setToLoc] = useState({});
+    const  [showDirections, setShowDirections] = useState(false);
+    const  [requestDistance, setRequestDistance] = useState(0);
      const [requesTime, setRequestTime] = useState(0);
      const [requestPrice, setRequestPrice] = useState(0);
      const [modaltitle, setModalTitle] = useState('');
@@ -48,34 +48,34 @@ export default function Home() {
      const [loading, setLoading] = useState (false);
      
 
-    useEffect(() => {
+     useEffect(() => {
      Geocoder.init(MapsAPI ,{language:'pt-br' });
      getMyCurrentPosition();
-      },[]);
+     },[]);
 
       
       useEffect(()=>{
         if(fromLoc.center && toLoc.center) {
              setShowDirections(true);
         }
-     },[toLoc]);
+        },[toLoc]);
 
      useEffect(()=>{
       if(fromLoc.center){
           setMapLoc(fromLoc);
-      }
-       },[fromLoc]);
+         }
+         },[fromLoc]);
 
-      const getMyCurrentPosition = () => {
-        Location.installWebGeolocationPolyfill()
-         navigator.geolocation.getCurrentPosition(async(info) => {
-           console.log(info.coords);
+            const getMyCurrentPosition = () => {
+            Location.installWebGeolocationPolyfill()
+            navigator.geolocation.getCurrentPosition(async(info) => {
+            console.log(info.coords);
             
-          const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
-          if(geo.results.length > 0) {
-               const loc = {
-                   name:geo.results[0].formatted_address,
-                   center:{
+           const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
+           if(geo.results.length > 0) {
+                  const loc = {
+                       name:geo.results[0].formatted_address,
+                       center:{
                        latitude:info.coords.latitude,
                        longitude:info.coords.longitude
                    },
@@ -97,18 +97,15 @@ export default function Home() {
         });
         }
 
-        const handlepinclick = () => {
-          setToLoc(tokyoRegion);
-    }
-
-        const handleFromClick = () =>{
+        
+         const handleFromClick = () =>{
           setModalTitle('Escolha a origem');
           setModalField('from');
           setModalVisible(true);
       }
 
       
-        const handleToClick = async() => {
+         const handleToClick = async() => {
           setModalTitle('Escolha um destino');
           setModalField('to');
           setModalVisible(true);  
@@ -130,9 +127,9 @@ export default function Home() {
             if(!priceReq.error){  setRequestPrice( priceReq.price);}
       }
 
-      const handleRequestGo = async () => {
-        setLoading(true);
-        const driver = await api.findDriver({
+        const handleRequestGo = async () => {
+           setLoading(true);
+             const driver = await api.findDriver({
                 fromlat:fromLoc.center.latitude,
                 fromlng:fromLoc.center.longitude,
                 tolat:toLoc.latitude,
@@ -146,7 +143,7 @@ export default function Home() {
         }
     }
     
-      const handleRequestCancel = () => {
+       const handleRequestCancel = () => {
         setToLoc({});
         setShowDirections(false);
         setRequestDistance(0);
@@ -156,8 +153,8 @@ export default function Home() {
         setMapLoc(fromLoc);
     }
 
-    const handleModalClick = ( field, address) =>{
-      const loc = {
+      const handleModalClick = ( field, address) =>{
+        const loc = {
           name:address.address,
           center:{
               latitude:address.latitude,
@@ -169,13 +166,13 @@ export default function Home() {
           heading:0
       };
 
-      switch(field){
-          case 'from':
-          setFromLoc(loc);
-          break;
-          case 'to':
-              setToLoc(loc);
-              break;
+         switch(field){
+              case 'from':
+             setFromLoc(loc);
+                break;
+                case 'to':
+             setToLoc(loc);
+                break;
       }
   } 
 
@@ -185,7 +182,10 @@ export default function Home() {
 
      const setbsb= () => {
               setEspford('bsbRegion');
-}
+} 
+        const setdest = () => {
+          setToLoc({tokyoRegion});
+        }
      
      const tokyoRegion = { 
        latitude : -15.829636, 
@@ -207,6 +207,8 @@ export default function Home() {
          latitudeDelta : 0.01, 
          longitudeDelta : 0.01, 
        };
+
+      
 
        function onOpenMod() {
         modalizeRef.current?.open();
@@ -415,7 +417,7 @@ export default function Home() {
         HeaderComponent={
           <>
           
-              <TouchableOpacity onPress={handlepinclick}  style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
+              <TouchableOpacity onPress={setdest} style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
                         <Text>Escolher uma foto</Text>
               </TouchableOpacity>
              

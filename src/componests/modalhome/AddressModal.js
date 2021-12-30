@@ -99,7 +99,6 @@ export default (props) => {
          setResults([]);
          setSearchText('');
      }
-
      const handleResultClick = (item) => {
         props.clickAction(props.field,item);
         props.visibleAction(false);

@@ -11,6 +11,7 @@ import PikerGuincho from '../../componests/Markers/PikerGuincho';
 import Pikerpecas from '../../componests/Markers/PikerPecas';
 import PikerLavagem from '../../componests/Markers/PikerLavagem';
 import PikerMecanico from '../../componests/Markers/PikerMecanico';
+import BoxCard from '../../componests/Card/BoxCard';
 
 
 
@@ -19,6 +20,7 @@ export default function Pickup() {
   const {user} = useContext(AuthContext);
   const uid = user && user.uid;
   const navigation = useNavigation();
+  
   
   const handleNavi = () => {
     alert('Ops, essa funcionalidade ainda não esta disponível');
@@ -34,7 +36,8 @@ useEffect(()=>{
 },[]);
 
  return (
-      <SafeAreaView style={{alignItems:'center'}}>
+      <SafeAreaView style={{alignItems:'center',marginTop:60}}>
+
           <Card/>
          
       <View style={styles.containertow}>
@@ -47,7 +50,8 @@ useEffect(()=>{
 
         <PikerMecanico/>
 
-        
+        <BoxCard/>
+       
 
         {usetipo && 
       <TouchableOpacity  onPress={() => navigation.navigate('CenterAdm')}>

@@ -1,12 +1,11 @@
 import React, {useState, useContext, useRef,useEffect} from 'react';
-import { View, Image, TouchableOpacity,Text, ActivityIndicator} from 'react-native';
+import { View, Image, TouchableOpacity,Text,Modal} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Modalize } from 'react-native-modalize';
 import * as Firebase from 'firebase';
 import {AuthContext} from '../../contexs/auth';
 import firebaseConetion from '../../services/firebaseConnection';
 import styles from './styled';
-
 
 
 export default (props) => {
@@ -17,8 +16,9 @@ export default (props) => {
 
     const [image,setImage] = useState();
     const [upLoading, setupLoading] = useState(false);
-
-
+    const [modaelVisible, setModaelVisible] = useState (false);
+    
+    
     const {user, signOut} = useContext(AuthContext);
     const modalizeRef = useRef ();
 
@@ -101,7 +101,10 @@ export default (props) => {
 
       function onOpen() {
         modalizeRef.current?.open();
-      }
+      };
+
+     
+
 
  return (
 <>    
@@ -123,10 +126,16 @@ export default (props) => {
            <Text style={styles.textname}>{user.nome}</Text>
            <Text style={styles.textitemns}>{user.email}</Text>
            <Text style={styles.textitemns}>Telefone</Text>
-           <Text style={styles.textitemns}>Modelo e ano</Text>  
+           <Text style={styles.textitemns}>Modelo e ano</Text> 
+           <TouchableOpacity onPress={()=>setModaelVisible(true)}  style={{width:90,height:30,borderRadius:15, backgroundColor:"#eee", alignItems:'center', justifyContent:'center', position:'absolute',bottom:1,right:1}}>
+                <Text>Validar</Text>
+           </TouchableOpacity> 
          
        </View>
      </View>
+
+   
+     
 
 <Modalize
 ref={modalizeRef}
@@ -161,6 +170,72 @@ HeaderComponent={
 >
   
 </Modalize>
+
+<Modal
+        visible={modaelVisible}
+        animationType="slide"
+        transparent={true}
+         >
+         <>
+       <View style={styles.Box}>
+         <View style={styles.boxCard}>
+        <View style={{flexDirection:'column', height:"100%",width:"30%"}}>
+       
+             <View style={styles.boxCardOne}>
+                 <View style={{
+                     width:120,
+                     height:120,
+                     backgroundColor:"#000",
+                     borderRadius:75,
+                     alignItems:'center',
+                     marginTop:20,
+                     marginBottom:20,}}>
+                        
+                 </View>
+                 <View style={{
+                     width:200,
+                     height:100,
+                     justifyContent:'center',
+                     marginTop:30,
+                     }}>
+                          <Image source={require('../../assets/CIVIC.png')} style={{margin:"2%",width:180,height:80}}/>
+            
+
+                 </View>
+              </View>
+         </View>
+
+         <View style={styles.boxCardthow}>
+                <View style={{
+                     flex:1,
+                     backgroundColor:"#ff0000"
+                     }}>
+                        
+                 </View>
+                 <View style={{
+                     flex:1,
+                     backgroundColor:"#131313"
+                     }}>
+
+                 </View>
+             
+            </View>
+
+
+
+             <View style={styles.boxCardthree}>
+             <Text>FlatList</Text>
+             <Text>Histórico de atendimentos</Text>
+             <Text>Todas as peças e manutenção feitas</Text>
+                   <TouchableOpacity onPress={()=>setModaelVisible(false)} style={{width:100,height:20}}>
+                     <Text>Sair</Text>
+                     </TouchableOpacity>     
+             </View>
+               </View>
+         </View>
+       
+       </>
+     </Modal>
 
 </>
 

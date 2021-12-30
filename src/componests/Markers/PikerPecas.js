@@ -11,8 +11,8 @@ export default function Pikerpecas(props) {
           <Image source={require('../../assets/OpcapMarkert.png')} 
           style={styles.OpcaoMarketPlace}/>
            <View style={{position:'absolute',top:30,left:10,width:"100%",height:20}}>
-              <Text style={styles.textname}>Lojas</Text>
-              <Text style={styles.textitemns}>Fornecedores de peças</Text>
+              <Text style={styles.textname}>Promoções</Text>
+              <Text style={styles.textitemns}>Produtos com até 50% de desconto</Text>
               </View>
           </TouchableOpacity>
        );

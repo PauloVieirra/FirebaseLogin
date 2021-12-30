@@ -6,6 +6,8 @@ background-color:#eee;
 `;
 
 export const Container = styled.KeyboardAvoidingView`
+margin-top:50px;
+margin-bottom:50px;
 flex:1;
 align-items:center;
 justify-content:center;
