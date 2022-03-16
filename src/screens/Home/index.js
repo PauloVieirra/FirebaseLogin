@@ -1,16 +1,14 @@
 import  React, {useEffect, useRef, useState} from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
-import { MapsAPI } from '../../apigoogle';
+import MapView from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions, TouchableHighlight,TouchableOpacity, Image, ScrollView } from 'react-native';
+import { MapsAPI } from '../../services/apigoogle';
 import useApi from '../../services/requestApi';
 import MapViewDirections from 'react-native-maps-directions';
 import AddressModal from '../../componests/modalhome/AddressModal';
-import { Modalize } from 'react-native-modalize';
 import { useNavigation } from '@react-navigation/native';
 import Geocoder from 'react-native-geocoding';
 import * as Location from 'expo-location';
-import { Viewdet, LoadingArea} from './styled';
-import * as Permissions from 'expo-permissions';
+import { Viewdet} from './styled';
 
 
 export default function Home() {
@@ -41,11 +39,8 @@ export default function Home() {
      const [modaltitle, setModalTitle] = useState('');
      const [modalvisible, setModalVisible] = useState (false);
      const [modalField, setModalField] = useState ('');
-     const [especialista, setEspecialista] = useState ();
-     const [espford, setEspford] = useState ();
-     const modalizeRef = useRef ();
 
-     const [loading, setLoading] = useState (false);
+     const [setLoading] = useState (false);
      
 
      useEffect(() => {
@@ -175,45 +170,7 @@ export default function Home() {
                 break;
       }
   } 
-
-     const setmarker= () => {
-           setEspecialista('tokyoRegion');
-     }
-
-     const setbsb= () => {
-              setEspford('bsbRegion');
-} 
-        const setdest = () => {
-          setToLoc({tokyoRegion});
-        }
-     
-     const tokyoRegion = { 
-       latitude : -15.829636, 
-       longitude : -47.991948,
-        latitudeDelta : 0.01, 
-        longitudeDelta : 0.01,
-      };
-
-      const bsbRegion = {
-        latitude : -15.839930,
-        longitude : -48.001979,
-         latitudeDelta : 0.01, 
-         longitudeDelta : 0.01, 
-       };
-
-       const bsbRegion2 = {
-        latitude : -15.831438,
-        longitude : -47.998483,
-         latitudeDelta : 0.01, 
-         longitudeDelta : 0.01, 
-       };
-
-      
-
-       function onOpenMod() {
-        modalizeRef.current?.open();
-      }
-      
+   
   return (
     <View style={styles.container}>
       <>
@@ -234,31 +191,7 @@ export default function Home() {
                   {toLoc.center &&
                  <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
                  }
-                  {especialista &&
-                  < Marker coordinate = { tokyoRegion } onPress={onOpenMod}>
-                     <View style={{width:40,height:56, alignItems:'center',padding:1}}>
-                     <Image source={require('../../assets/offparceria.png')}style={{width:38, height:55}}/>
-                     </View>
-                  </Marker>
-                  }
-
-                  {espford &&
-                  < Marker coordinate = { bsbRegion } setToLoc={bsbRegion}>
-                    <View style={{width:40,height:56, alignItems:'center',padding:1}}>
-                     <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
-                     </View>
-                  </Marker>
-                  }
-                  {espford &&
-                  < Marker coordinate = { bsbRegion2 } >
-                    <View style={{width:40,height:56, alignItems:'center',padding:1}}>
-                     <Image source={require('../../assets/offparceria.png')}style={{width:35, height:54}}/>
-                     </View>
-                  </Marker>
-                  }
-
-
-                
+                 
                 {showDirections &&
                 <MapViewDirections
                  lineDashPattern={[0]}
@@ -373,62 +306,38 @@ export default function Home() {
        horizontal={true}
        style={styles.viewespecialista}>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-          onPress={setmarker}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especijac.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especiford.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especiafiat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especibmwt.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especicitroen.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especihondat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}} 
-           onPress={setbsb}> 
+          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
             <Image source={require('../../assets/Especialistas/especipeogeot.png')} style={{width:70, height:"100%", borderRadius:12}}/>
           </TouchableOpacity>
 
 
        </ScrollView>
 
-       <Modalize
-        ref={modalizeRef}
-        snapPoint={200}
-        HeaderComponent={
-          <>
-          
-              <TouchableOpacity onPress={setdest} style={{width:180,height:40, backgroundColor:"#eee", alignItems:'center', justifyContent:'center'}}>
-                        <Text>Escolher uma foto</Text>
-              </TouchableOpacity>
-             
-         
-           </>
-        }
-       >
-
-       </Modalize>
-       
-
+    
       <AddressModal
      title={modaltitle}
      visible={modalvisible}
@@ -441,9 +350,6 @@ export default function Home() {
 </View>
   );
 }
-
-
-
 
 
 const styles = StyleSheet.create({

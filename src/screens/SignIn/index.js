@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import { AuthContext } from '../../contexs/auth';
 import {Background,
@@ -11,7 +11,6 @@ import {Background,
      SingUpText,
      Logo,
      BtnLogin} from './styled';
-import { useContext } from 'react/cjs/react.development';
 
 
 

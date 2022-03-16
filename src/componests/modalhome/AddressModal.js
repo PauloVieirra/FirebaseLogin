@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {Modal, ScrollView} from 'react-native';
 import styled from "styled-components/native";
-import { MapsAPI } from "../../apigoogle";
+import { MapsAPI } from "../../services/apigoogle";
 import Geocoder from "react-native-geocoding";
 
 const ModalArea = styled.View`

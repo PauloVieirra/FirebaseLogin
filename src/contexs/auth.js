@@ -1,10 +1,11 @@
 import React, {useState, createContext, useEffect } from "react";
 import firebase from '../services/firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export const AuthContext = createContext({});
 
 function AuthProvider({children}){
-    const[user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(()=> {
@@ -15,15 +16,15 @@ function AuthProvider({children}){
                 setUser(JSON.parse(storageUser));
                 setLoading(false);
             }
- 
             setLoading(false);
         }
         
         loadStorage();
      }, []);
 
-    //Logar usuario
-    async function signIn(email, password){
+   
+     //Funcao para logar o usario
+     async function signIn(email, password){
         await firebase.auth().signInWithEmailAndPassword(email,password)
         .then(async (value)=>{
             let uid = value.user.uid;
@@ -35,6 +36,30 @@ function AuthProvider({children}){
                   email: value.user.email,
                 };
 
+                setUser(data);
+               
+            })
+        })
+        .catch((error)=> {
+            alert(error.code);
+        });
+    }
+
+     //Cadastrar usuario
+     async function signUp(email, password, nome){
+        await firebase.auth().createUserWithEmailAndPassword(email,password)
+        .then(async (value)=>{
+            let uid = value.user.uid;
+            await firebase.database().ref('users').child(uid).set({
+                saldo: 0,
+                nome: nome
+            })
+            .then(()=>{
+                let data = {
+                    uid: uid,
+                    nome: nome,
+                    email: value.user.email,
+                };
                 setUser(data);
                 storageUser(data);
             })
@@ -48,43 +73,23 @@ function AuthProvider({children}){
         await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
     }
 
-    async function signOut(data) {
+
+    async function signOut(){
         await firebase.auth().signOut();
         await AsyncStorage.clear()
-        .then(() => {
-              setUser(null);
+        .then( () => {
+           setUser(null); 
         })
+
     }
 
-    //Cadastrando usuario
-    async function signUp(email, password, nome, veiculo, ano, modelo, cor){
-        await firebase.auth().createUserWithEmailAndPassword(email,password)
-        .then(async (value)=>{
-            let uid = value.user.uid;
-            await firebase.database().ref('users').child(uid).set({
-                nome: nome,
-                veiculo: veiculo,
-                modelo: modelo,
-                ano: ano,
-                cor: cor,
-                
-            })
-            .then(()=>{
-                let data = {
-                    uid: uid,
-                    nome: nome,
-                    email: value.user.email,
-                };
-                setUser(data);
-                storageUser(data);
-            })
-        })
-    }
+
     return(
-        <AuthContext.Provider value={{ signed: !!user , user, signUp, signOut, signIn, loading }}>
+        <AuthContext.Provider value={{signed: !!user,user, loading, signUp, signIn, signOut }}>
             {children}
-        </AuthContext.Provider>   
+        </AuthContext.Provider>
        );
+
 }
 
 export default AuthProvider;
