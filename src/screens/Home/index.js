@@ -1,15 +1,14 @@
 import  React, {useEffect, useRef, useState} from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { MapsAPI } from '../../apigoogle';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { MapsAPI } from '../../services/apigoogle';
 import Geocoder from 'react-native-geocoding';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
 
-
-
 export default function Home() {
+
   const map = useRef();
   
    const [regiaomap, setRegiaomap] = useState({

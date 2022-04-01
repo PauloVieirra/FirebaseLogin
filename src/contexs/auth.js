@@ -1,6 +1,7 @@
 import React, {useState, createContext, useEffect } from "react";
 import firebase from '../services/firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export const AuthContext = createContext({});
 
 function AuthProvider({children}){
@@ -48,6 +49,15 @@ function AuthProvider({children}){
         await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
     }
 
+    async function signOut(){
+        await firebase.auth().signOut();
+        await AsyncStorage.clear()
+        .then( () => {
+           setUser(null); 
+        })
+
+    }
+
     //Cadastrando usuario
     async function signUp(email, password, nome, veiculo, ano, modelo, cor){
         await firebase.auth().createUserWithEmailAndPassword(email,password)
@@ -73,7 +83,7 @@ function AuthProvider({children}){
         })
     }
     return(
-        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading }}>
+        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut }}>
             {children}
         </AuthContext.Provider>   
        );

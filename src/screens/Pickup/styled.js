@@ -14,6 +14,9 @@ const styles= StyleSheet.create({
       width:"100%",
       height:"30%",
       backgroundColor:"#fff",
+      justifyContent:'center',
+      alignItems:'center'
+
     },
     containertow:{
         width:"100%",

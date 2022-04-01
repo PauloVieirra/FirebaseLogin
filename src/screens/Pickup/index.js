@@ -1,9 +1,13 @@
-import React from 'react';
-import { Image, View, Dimensions,TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useContext } from 'react';
+import { Image,Text, View,TouchableOpacity, SafeAreaView } from 'react-native';
 import styles from './styled';
+import { AuthContext } from '../../contexs/auth';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Pickup() {
+
+  const { user, signOut } = useContext(AuthContext);
+
   const navigation = useNavigation();
   const handleNavi = () => {
     alert('Ops, essa funcionalidade ainda não esta disponível');
@@ -11,7 +15,13 @@ export default function Pickup() {
 
  return (
       <SafeAreaView>
-        <View style={styles.container}></View>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={ () => signOut() }>
+            <Text>Sair da conta</Text>
+          </TouchableOpacity>
+          <Text> Olá { user && user.nome }</Text>
+          <Text>{ user && user.email }</Text>
+        </View>
         <View style={styles.containertow}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}> 
         <Image source={require('../../assets/bannergui.png')} 
