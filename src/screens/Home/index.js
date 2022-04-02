@@ -7,6 +7,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import useApi from '../../services/requestApi';
 import Geocoder from 'react-native-geocoding';
 import AddressModal from '../../components/modalhome/AddressModal';
+import Scrollespecialist from '../../components/Scrollespecialist/Scrollspecial';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
@@ -304,6 +305,8 @@ export default function Home() {
              } 
                
           </View>
+
+          <Scrollespecialist/>
 
           <AddressModal
      title={modaltitle}
