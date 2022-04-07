@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 
 const styles= StyleSheet.create({
@@ -26,8 +27,8 @@ const styles= StyleSheet.create({
       },
     
       viewdetail:{
-          flexDirection:'row',
-          position:'absolute',bottom:60,
+          flexDirection:'column',
+          position:'absolute',bottom:1,
           width:"100%",
           height:100,
       },
@@ -50,17 +51,26 @@ const styles= StyleSheet.create({
           flexDirection: "row",
           marginTop:5,
           width:"100%",
-          height:"50%",
-          backgroundColor: 'white',
-          opacity: 0.7,
+          height:80,
+          backgroundColor:"#eee",
+          opacity: 0.9,
           paddingTop:1,
       },
+      viewdetailsg:{
+          position:'absolute',top:180,
+          alignItems:'center',
+          flexDirection: "row",
+          marginTop:5,
+          width:"100%",
+          height:80,
+          opacity: 0.7,
+          paddingTop:1,
+    },
       viewbtn:{
           alignItems:'center',
-          flexDirection:'row',
           justifyContent:'center',
+          position:'absolute', bottom:20,
           borderRadius:30,
-          marginLeft:10,
           width:"80%",
           height:50,
           borderWidth:1,
@@ -71,7 +81,7 @@ const styles= StyleSheet.create({
        viewbtnsair:{
           flexDirection:'row',
           justifyContent:'center',
-          width:"15%",
+          position:'absolute', top:200,left:10,
           borderTopRightRadius:30,
           borderBottomRightRadius:30,
           height:50,
@@ -90,7 +100,7 @@ const styles= StyleSheet.create({
           height:45,
       },
       bntsair:{
-        position:'absolute',left:"15%",height:"40%", top:1,
+        position:'absolute',top:280,left:"3%",
         alignItems:'center',
         justifyContent:'center',
         borderRadius:30,
@@ -185,7 +195,98 @@ const styles= StyleSheet.create({
     Viewdet:{
       flex:1,
       alignItems:'center',
-    },  
+    },
+    chipsScrollView: {
+      bottom:Platform.OS === 'ios' ? 90 : 80, 
+      paddingHorizontal:10
+    },
+    chipsIcon: {
+      marginRight: 5,
+    },
+    chipsItem: {
+      flexDirection:"row",
+      backgroundColor:'#fff', 
+      borderRadius:20,
+      padding:8,
+      paddingHorizontal:20, 
+      marginHorizontal:10,
+      height:35,
+      shadowColor: '#ccc',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.8,
+      shadowRadius: 5,
+      elevation: 10,
+    },
+    rodape:{
+      flexDirection:'column',
+      alignItems:'center',
+      width:"100%",
+      height:200,
+      position:'absolute',bottom:1,
+    },
+    scrollView: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      paddingVertical: 10,
+    },
+    card: {
+      elevation: 2,
+      backgroundColor: "#fff",
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+      marginHorizontal: 10,
+      shadowColor: "#000",
+      shadowRadius: 5,
+      shadowOpacity: 0.3,
+      shadowOffset: { x: 2, y: -2 }, 
+      height: "100%",
+      width: 350,
+      overflow: "hidden",
+    },
+    cardImage: {
+      flex: 2,
+      width: "100%",
+      height: 120,
+      alignSelf: "center",
+    },
+    textContent: {
+      flex: 2,
+      padding: 10,
+    },
+    cardtitle: {
+      fontSize: 12,
+      // marginTop: 5,
+      fontWeight: "bold",
+    },
+    cardDescription: {
+      fontSize: 12,
+      color: "#444",
+    },
+    markerWrap: {
+      width: 150,
+      height: 200,
+    },
+    marker: {
+      width: 23,
+      height: 33,
+    },
+    button: {
+      alignItems: 'center',
+      marginTop: 5
+    },
+    signIn: {
+        width: '100%',
+        padding:5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 3
+    },
+    textSign: {
+        fontSize: 14,
+        fontWeight: 'bold'
+    }
  
    
   });

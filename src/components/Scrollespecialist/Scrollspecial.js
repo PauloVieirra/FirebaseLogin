@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View,Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import styles from './styled';
 
 export default function Scrollespecialist(props) {
@@ -7,35 +7,38 @@ export default function Scrollespecialist(props) {
    <View style={styles.container}>
        <ScrollView 
        horizontal={true}
+       showsHorizontalScrollIndicator={false}
        style={styles.viewespecialista}>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especijac.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:100, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+            <Text>Ford</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especiford.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+          <Text>Honda</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especiafiat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+          <Text>Mercedes</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especibmwt.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+            <Text>Fiat</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especicitroen.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+          <Text>Citroen</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especihondat.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+          <Text>Peogeot</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{width:70, height:"100%",marginLeft:10}}> 
-            <Image source={require('../../assets/Especialistas/especipeogeot.png')} style={{width:70, height:"100%", borderRadius:12}}/>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',width:120, height:34,marginLeft:10,backgroundColor:"#fff", borderRadius:17}}> 
+            <Text>Wolks</Text>
           </TouchableOpacity>
+
+          
 
 
        </ScrollView>

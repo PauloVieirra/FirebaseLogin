@@ -9,6 +9,7 @@ export default function Pickup() {
   const { user, signOut } = useContext(AuthContext);
 
   const navigation = useNavigation();
+  
   const handleNavi = () => {
     alert('Ops, essa funcionalidade ainda não esta disponível');
 }

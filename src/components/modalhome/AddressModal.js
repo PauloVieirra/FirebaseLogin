@@ -6,15 +6,34 @@ import Geocoder from "react-native-geocoding";
 
 const ModalArea = styled.View`
 width:100%;
-height:70%;
-margin-top:1;
+height:75%;
 background-color:#fff;
 align-items:center;
 `;
 
+const Head = styled.View`
+width:100%;
+height:80px;
+background-color:#000;
+justify-content:center;
+align-items:center;
+`; 
+
+const ModalAds = styled.View`
+width:100%;
+height:100%;
+background-color:#fff;
+`; 
+
 const ModalHeader = styled.View`
 flex-direction:row;
-padding:20px;
+width:90%;
+height:50px;
+background-color:#fff;
+border-radius:25px;
+justify-content:center;
+align-items:center;
+padding:1px;
 `; 
 
 const ModalClose = styled.TouchableHighlight`
@@ -38,7 +57,7 @@ font-weight:bold;
 
 const ModalResults = styled.View`
 width:96%;
-height:100%;
+height:80%;
 `;
 
 const ModalResult = styled.TouchableHighlight`
@@ -112,12 +131,14 @@ export default (props) => {
         >
 
             <ModalArea>
+                <Head>
                  <ModalHeader>
                      <ModalClose onPress={handleCloseAction}>
                          <ModalCloseText>X</ModalCloseText>
                       </ModalClose>
                      <ModalInput value={searchText} onChangeText={t=>setSearchText(t)} autoFocus={true} placeholder={props.title} placeholderTextColor="#999"></ModalInput>
                  </ModalHeader>
+                </Head>
                  <ModalResults>
                      <ScrollView>
                      {results.map((i,k)=>(
@@ -127,6 +148,7 @@ export default (props) => {
                      ))}
                      </ScrollView>
                  </ModalResults>
+                 <ModalAds></ModalAds>
             </ModalArea>
 
         </Modal>

@@ -1,49 +1,144 @@
 import  React, {useEffect, useRef, useState} from 'react';
 import MapView from 'react-native-maps';
-import {View,Text, TouchableHighlight,TouchableOpacity} from 'react-native';
+import {View,Platform,Text,Dimensions,StyleSheet, TouchableHighlight,TouchableOpacity,Animated,Image, ScrollView} from 'react-native';
 import styles from './styled';
 import { MapsAPI } from '../../services/apigoogle';
 import MapViewDirections from 'react-native-maps-directions';
 import useApi from '../../services/requestApi';
 import Geocoder from 'react-native-geocoding';
 import AddressModal from '../../components/modalhome/AddressModal';
-import Scrollespecialist from '../../components/Scrollespecialist/Scrollspecial';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
+import { locations, locGuincho } from '../../../services/Data';
+import CustomMarker from '../../components/Markers/CustomMarker';
+import CustomMarkerGui from '../../components/Markers/CustomMarkerGui';
+import { Marker } from 'react-native-maps';
+import { markers,  mapDarkStyle, mapStandardStyle } from '../../../services/mapData';
+import StarRating from '../../components/StarRating';
 import * as Permissions from 'expo-permissions';
+
+const { width, height } = Dimensions.get("window");
+const CARD_HEIGHT = 220;
+const CARD_WIDTH = width * 0.8;
+const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
+
 
 export default function Home() {
 
   const map = useRef();
   const api = useApi();
   const navigation = useNavigation();
+
+  const [fromLoc, setFromLoc] = useState({});
+  const [toLoc, setToLoc] = useState({});
+  const [showDirections, setShowDirections] = useState(false);
+  const [requestDistance, setRequestDistance] = useState(0);
+  const [requesTime, setRequestTime] = useState(0);
+  const [requestPrice, setRequestPrice] = useState(0);
+
+  const [modaltitle, setModalTitle] = useState('');
+  const [modalvisible, setModalVisible] = useState (false);
+  const [modalField, setModalField] = useState ('');
+
+  const [setLoading] = useState (false);
   
-  
-   const [mapLoc, setMapLoc] = useState({
-      center:{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.000904,
-        longitudeDelta: 0.000905,
-        },
-          zoom:18,
-          pitch:0,
-          altitude:0,
-          heading:0
-          
+  const [mapLoc, setMapLoc] = useState({
+    center:{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.000904,
+      longitudeDelta: 0.000905,
+      },
+        zoom:10,
+        pitch:0,
+        altitude:0,
+        heading:0  
+  });
+
+   //Montando categorias - depois mudar para componente
+   const initialMapState = {
+    markers,
+    categories: [
+      { 
+        name: 'Ford', 
+        
+      },
+      {
+        name: 'Honda',
+        
+      },
+      {
+        name: 'Fiat',
+        
+      },
+      {
+        name: 'Citroen',
+        
+      },
+      {
+        name: 'Volks',
+        
+      },
+  ],
+    region: {
+      latitude: 22.62938671242907,
+      longitude: 88.4354486029795,
+      latitudeDelta: 0.04864195044303443,
+      longitudeDelta: 0.040142817690068,
+    },
+  };
+
+   const [state, setState] = React.useState(initialMapState);
+   let mapIndex = 0;
+   let mapAnimation = new Animated.Value(0);
+
+   useEffect(() => {
+    mapAnimation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= state.markers.length) {
+        index = state.markers.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(regionTimeout);
+
+      const regionTimeout = setTimeout(() => {
+        if( mapIndex !== index ) {
+          mapIndex = index;
+          const { coordinate } = state.markers[index];
+          map.current.animateToRegion(
+            {
+              ...coordinate,
+              latitudeDelta: state.region.latitudeDelta,
+              longitudeDelta: state.region.longitudeDelta,
+            },
+            350
+          );
+        }
+      }, 10);
+    });
+  });
+
+  const interpolations = state.markers.map((marker, index) => {
+    const inputRange = [
+      (index - 1) * CARD_WIDTH,
+      index * CARD_WIDTH,
+      ((index + 1) * CARD_WIDTH),
+    ];
+
+    const scale = mapAnimation.interpolate({
+      inputRange,
+      outputRange: [1, 1.1, 1],
+      extrapolate: "clamp"
     });
 
-    const [fromLoc, setFromLoc] = useState({});
-    const [toLoc, setToLoc] = useState({});
-    const  [showDirections, setShowDirections] = useState(false);
-    const  [requestDistance, setRequestDistance] = useState(0);
-     const [requesTime, setRequestTime] = useState(0);
-     const [requestPrice, setRequestPrice] = useState(0);
-     const [modaltitle, setModalTitle] = useState('');
-     const [modalvisible, setModalVisible] = useState (false);
-     const [modalField, setModalField] = useState ('');
+    return { scale };
+  });
 
-     const [setLoading] = useState (false);
+
+  const _scrollView = React.useRef(null);
 
     useEffect(() => {
      Geocoder.init(MapsAPI ,{language:'pt-br' });
@@ -62,83 +157,77 @@ export default function Home() {
              }
              },[fromLoc]);
 
-      const getMyCurrentPosition = () => {
-        Location.installWebGeolocationPolyfill()
-         navigator.geolocation.getCurrentPosition(async(info) => {
-           console.log(info.coords);
+   const getMyCurrentPosition = () => {
+      Location.installWebGeolocationPolyfill()
+       navigator.geolocation.getCurrentPosition(async(info) => {
+       console.log(info.coords);
             
-          const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
-          if(geo.results.length > 0) {
-               const loc = {
-                   name:geo.results[0].formatted_address,
-                   center:{
-                       latitude:info.coords.latitude,
-                       longitude:info.coords.longitude
-                   },
-                   zoom:18,
-                   pitch:0,
-                   altitude:0,
-                   heading:0
+   const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
+      if(geo.results.length > 0) {
+      const loc = {
+              name:geo.results[0].formatted_address,
+              center:{
+                latitude:info.coords.latitude,
+                longitude:info.coords.longitude
+              },
+                zoom:13,
+                pitch:0,
+                altitude:0,
+                heading:0
                };
 
                setMapLoc(loc);
                setFromLoc(loc);
-           }
-          
-           
-        }, (error)=>{
-            
+               }
+               }, (error)=>{
+});
+}
 
-        });
-        }
-
-        const handleFromClick = () =>{
+   const handleFromClick = () =>{
           setModalTitle('Escolha a origem');
           setModalField('from');
-          setModalVisible(true);
-      }
+          setModalVisible(true);}
 
       
-         const handleToClick = async() => {
+   const handleToClick = async() => {
           setModalTitle('Escolha um destino');
           setModalField('to');
-          setModalVisible(true);  
-         }
+          setModalVisible(true);}
 
-         const handleDirectionsReady = async (r) => {
+   const handleDirectionsReady = async (r) => {
           map.current.fitToCoordinates(r.coordinates, {
             edgePadding:{
                 left:50,
-                right:50,
-                bottom:200,
-                top:310,
-            }
-  
-         });
-              setRequestDistance(r.distance);
-              setRequestTime(r.duration);
-              const priceReq = await api.getRequestPrice(r.distance);
-              if(!priceReq.error){  setRequestPrice( priceReq.price);}
-        }
+                 right:50,
+                 bottom:150,
+                 top:360,
+            }});
 
-        const handleRequestGo = async () => {
-          setLoading(true);
-            const driver = await api.findDriver({
+         setRequestDistance(r.distance);
+         setRequestTime(r.duration);
+  const priceReq = await api.getRequestPrice(r.distance);
+         if(!priceReq.error){  setRequestPrice( priceReq.price);}}
+
+         
+
+  const handleRequestGo = async () => {
+         setLoading(true);
+  const driver = await api.findDriver({
                fromlat:fromLoc.center.latitude,
                fromlng:fromLoc.center.longitude,
                tolat:toLoc.latitude,
-               tolng:toLoc.longitude
-       });
-       setLoading(false);
-       if(!driver.error){
+               tolng:toLoc.longitude});
+
+         setLoading(false);
+         if(!driver.error){
            //Encontrou Motorista
-       }else{
+         }else{
            alert(driver.error)
-       }
-   }
+    }
+}
 
          
-         const handleRequestCancel = () => {
+   const handleRequestCancel = () => {
           setToLoc({});
           setShowDirections(false);
           setRequestDistance(0);
@@ -148,49 +237,94 @@ export default function Home() {
           setMapLoc(fromLoc);
          }
 
-         const handleModalClick = ( field, address) =>{
-          const loc = {
-            name:address.address,
-            center:{
-                latitude:address.latitude,
-                longitude:address.longitude,
-            },
+  const handleModalClick = ( field, address) =>{
+  const loc = {
+        name:address.address,
+        center:{
+           latitude:address.latitude,
+           longitude:address.longitude,
+        },
             zoom:16,
             pitch:0,
             altitude:0,
             heading:0
         };
   
-           switch(field){
-                case 'from':
-               setFromLoc(loc);
-                  break;
-                  case 'to':
-               setToLoc(loc);
-                  break;
+        switch(field){
+            case 'from':
+         setFromLoc(loc);
+            break;
+            case 'to':
+         setToLoc(loc);
+             break;
         }
     } 
 
-         const handleMapChange = async () => {
-           const cam = await map.current.getCamera();
-           cam.altitude = 0;
+  const handleMapChange = async () => {
+  const cam = await map.current.getCamera();
+        cam.altitude = 0;
            setMapLoc(cam);
          }
 
-  
+  const onMarkerPress = (mapEventData) => {
+  const markerID = mapEventData._targetInst.return.key;
+      
+          let x = (markerID * CARD_WIDTH) + (markerID * 30); 
+          if (Platform.OS === 'ios') {
+            x = x - SPACING_FOR_CARD_INSET;
+          }
+      
+          _scrollView.current.scrollTo({x: x, y: 0, animated: true});
+        }
 
-  
+
   return (
     <View style={styles.container}>
       <MapView 
        ref={map}
        style={{width:'100%', height:'100%'}}
-       showsUserLocation={true}
+       showsMyLocationButton={true}
+       followsUserLocation={true}
        loadingEnabled={true}
        camera={mapLoc}
        onRegionChangeComplete={handleMapChange}
-        >
-          
+        >  
+        {state.markers.map((marker, index) => {
+          const scaleStyle = {
+            transform: [
+              {
+                scale: interpolations[index].scale,
+              },
+            ],
+          };
+          return (
+            <MapView.Marker key={index} coordinate={marker.coordinate} onPress={(e)=>onMarkerPress(e)}>
+              <Animated.View style={[styles.markerWrap]}>
+
+                
+                <Animated.Image
+                  source={require('../../assets/map_marker.png')}
+                  style={[styles.marker, scaleStyle]}
+                  resizeMode="cover"
+                />
+              </Animated.View>
+            </MapView.Marker>
+          );
+        })}
+         
+              
+
+              {!toLoc.name &&
+                 locGuincho.map(marker => (
+                 <Marker coordinate = {{latitude: marker.latitude,longitude: marker.longitude}}>
+                <CustomMarkerGui item = {marker}/>
+                 </Marker>
+              
+                  ))
+                } 
+        
+    
+
                  {fromLoc.center &&
                  <MapView.Marker pinColor="#000" coordinate={fromLoc.center}/>
                  } 
@@ -276,8 +410,7 @@ export default function Home() {
            
         </View>
 }
-     
-
+    
              {toLoc.name && 
                <View style={styles.viewdetailz}>
                <TouchableOpacity style={styles.bntc}>
@@ -288,26 +421,119 @@ export default function Home() {
           
            
     </View>
-    <View style={styles.viewdetail}>
+    
              
-
-             <View style={styles.viewbtnsair}>
+        
                  <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
                    <Text style={{color:"#FFF", fontSize:18,}}>Sair</Text>
                    </TouchableOpacity>
-             </View>
+         
+                  
+          
+              
+               
+          
+          
+          <View style={styles.rodape}>
+           {!toLoc.name &&
+          <ScrollView
+              horizontal
+              scrollEventThrottle={1}
+              showsHorizontalScrollIndicator={false}
+              height={50}
+              style={styles.chipsScrollView}
+              contentInset={{ // iOS only
+                top:0,
+                left:0,
+                bottom:0,
+                right:20
+              }}
+              contentContainerStyle={{
+                paddingRight: Platform.OS === 'android' ? 20 : 0
+              }}
+            >
+              {state.categories.map((category, index) => (
+                <TouchableOpacity key={index} style={styles.chipsItem}>
+                  <Text>{category.name}</Text>
+                </TouchableOpacity>
+              ))}
+           </ScrollView>
+           }
+          {!toLoc.name && 
+           <Animated.ScrollView
+              ref={_scrollView}
+              horizontal
+              scrollEventThrottle={1}
+              showsHorizontalScrollIndicator={false}
+              style={stylex.scrollView}
+              pagingEnabled
+              snapToInterval={CARD_WIDTH + 20}
+              snapToAlignment="center"
+              contentInset={{ // iOS only
+                top:0,
+                left:SPACING_FOR_CARD_INSET,
+                bottom:0,
+                right:SPACING_FOR_CARD_INSET
+              }}
+              contentContainerStyle={{
+                paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0
+              }}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: {
+                      contentOffset: {
+                        x: mapAnimation,
+                      }
+                    },
+                  },
+                ],
+                {useNativeDriver: true}
+              )}
+            >
+        {state.markers.map((marker, index) =>(
+          <View style={stylex.card} key={index}>
+            <Image 
+              source={marker.image}
+              style={styles.cardImage}
+              resizeMode="cover"
+            />
+            <View style={styles.textContent}>
+              <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+              <StarRating ratings={marker.rating} reviews={marker.reviews} />
+              <Text numberOfLines={1} style={styles.cardDescription}>{marker.description}</Text>
+              <View style={styles.button}>
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={[styles.signIn, {
+                    borderColor: '#FF6347',
+                    borderWidth: 1
+                  }]}
+                >
+                  <Text style={[styles.textSign, {
+                    color: '#FF6347'
+                  }]}>Order Now</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </Animated.ScrollView>
+      }
+      
+              
              {toLoc.name &&
              <View style={styles.viewbtn}>
              <TouchableOpacity style={styles.bntchamar}>
              <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar Reboque</Text>
              </TouchableOpacity> 
-             </View>
+           </View>
              } 
-               
-          </View>
 
-          <Scrollespecialist/>
-
+            
+           </View>
+        
+       
           <AddressModal
      title={modaltitle}
      visible={modalvisible}
@@ -317,6 +543,118 @@ export default function Home() {
      />
 
     </View>
-  );
-}
+    
+  );}
 
+  const stylex = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    searchBox: {
+      position:'absolute', 
+      marginTop: Platform.OS === 'ios' ? 40 : 20, 
+      flexDirection:"row",
+      backgroundColor: '#fff',
+      width: '90%',
+      alignSelf:'center',
+      borderRadius: 5,
+      padding: 10,
+      shadowColor: '#ccc',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.5,
+      shadowRadius: 5,
+      elevation: 10,
+    },
+    chipsScrollView: {
+      position:'absolute', 
+      top:Platform.OS === 'ios' ? 90 : 80, 
+      paddingHorizontal:10
+    },
+    chipsIcon: {
+      marginRight: 5,
+    },
+    chipsItem: {
+      flexDirection:"row",
+      backgroundColor:'#fff', 
+      borderRadius:20,
+      padding:8,
+      paddingHorizontal:20, 
+      marginHorizontal:10,
+      height:35,
+      shadowColor: '#ccc',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.5,
+      shadowRadius: 5,
+      elevation: 10,
+    },
+    scrollView: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      paddingVertical: 10,
+    },
+    endPadding: {
+      paddingRight: width - CARD_WIDTH,
+    },
+    card: {
+      // padding: 10,
+      elevation: 2,
+      backgroundColor: "#FFF",
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+      marginHorizontal: 10,
+      shadowColor: "#000",
+      shadowRadius: 5,
+      shadowOpacity: 0.3,
+      shadowOffset: { x: 2, y: -2 },
+      height: CARD_HEIGHT,
+      width: CARD_WIDTH,
+      overflow: "hidden",
+    },
+    cardImage: {
+      flex: 3,
+      width: "100%",
+      height: "100%",
+      alignSelf: "center",
+    },
+    textContent: {
+      flex: 2,
+      padding: 10,
+    },
+    cardtitle: {
+      fontSize: 12,
+      // marginTop: 5,
+      fontWeight: "bold",
+    },
+    cardDescription: {
+      fontSize: 12,
+      color: "#444",
+    },
+    markerWrap: {
+      alignItems: "center",
+      justifyContent: "center",
+      width:50,
+      height:50,
+    },
+    marker: {
+      width: 30,
+      height: 30,
+    },
+    button: {
+      alignItems: 'center',
+      marginTop: 5
+    },
+    signIn: {
+        width: '100%',
+        padding:5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 3
+    },
+    textSign: {
+        fontSize: 14,
+        fontWeight: 'bold'
+    }
+  });
+  
