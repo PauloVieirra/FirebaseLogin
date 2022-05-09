@@ -7,8 +7,14 @@ export const AuthContext = createContext({});
 function AuthProvider({children}){
     const[user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [usuarios, setUsuarios] = useState([]);
+    const [amigao, setAmigao] = useState([]);
+    const [nome, setNome] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [cidade, setCidade] = useState('');
 
     useEffect(()=> {
+
         async function loadStorage(){
             const storageUser = await AsyncStorage.getItem('Auth_user');
  
@@ -20,8 +26,10 @@ function AuthProvider({children}){
             setLoading(false);
         }
         
-        loadStorage();
+        loadStorage()
+        
      }, []);
+
 
     //Logar usuario
     async function signIn(email, password){
@@ -34,10 +42,12 @@ function AuthProvider({children}){
                   uid: uid,
                   nome: snapshot.val().nome,
                   email: value.user.email,
-                };
+                 
 
+                };
+                 
                 setUser(data);
-                storageUser(data);
+                storageUser(data); 
             })
         })
         .catch((error)=> {
@@ -58,6 +68,7 @@ function AuthProvider({children}){
 
     }
 
+
     //Cadastrando usuario
     async function signUp(email, password, nome, veiculo, ano, modelo, cor){
         await firebase.auth().createUserWithEmailAndPassword(email,password)
@@ -76,14 +87,35 @@ function AuthProvider({children}){
                     uid: uid,
                     nome: nome,
                     email: value.user.email,
+                    
                 };
                 setUser(data);
                 storageUser(data);
             })
         })
     }
+
+    //Cadastro Amigão
+    async function cadAmigao(nome,telefone, cidade){
+        if(nome !== '' & telefone !== '' & cidade !== ''){
+          let amigao = await firebase.database().ref('amigao');
+          let chave = amigao.push().key;
+    
+          amigao.child(chave).set({
+            nome: nome,
+            telefone: telefone,
+            cidade: cidade
+          });
+    
+          alert('Cadastrado com sucesso!');
+          setTelefone('');
+          setNome('');
+          setCidade('');
+        }
+      }
+
     return(
-        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut }}>
+        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut,cadAmigao }}>
             {children}
         </AuthContext.Provider>   
        );

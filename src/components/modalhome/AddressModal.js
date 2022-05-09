@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from "react";
-import {Modal, ScrollView} from 'react-native';
+import {Modal,Text, ScrollView} from 'react-native';
 import styled from "styled-components/native";
 import { MapsAPI } from "../../services/apigoogle";
 import Geocoder from "react-native-geocoding";
+import { markers } from "../../../services/mapData";
 
 const ModalArea = styled.View`
 width:100%;
-height:75%;
+height:50%;
 background-color:#fff;
 align-items:center;
 `;
@@ -22,7 +23,7 @@ align-items:center;
 const ModalAds = styled.View`
 width:100%;
 height:100%;
-background-color:#fff;
+background-color:#eee;
 `; 
 
 const ModalHeader = styled.View`
@@ -81,37 +82,38 @@ export default (props) => {
      }, []);
 
      useEffect(()=>{
-          if(searchText){
+        if(searchText){
+         if(timer){
+           clearTimeout(timer);
+      }
+        timer = setTimeout(async()=>{
+        console.log("PESQUISANDO")
+        const geo = await Geocoder.from(searchText);
+        console.log("RESULTADO", geo.results.length);
+            if(geo.results.length > 0) {
+             let tmpResults = [];
+             for(let i in geo.results){
+              tmpResults.push({
+               address:geo.results[i].formatted_address,
+               latitude:geo.results[i].geometry.location.lat,
+               longitude:geo.results[0].geometry.location.lng
+               });
 
-              if(timer){
-                  clearTimeout(timer);
-              }
-              timer = setTimeout(async()=>{
-                  console.log("PESQUISANDO")
-                            const geo = await Geocoder.from(searchText);
-                             console.log("RESULTADO", geo.results.length);
-                                if(geo.results.length > 0) {
-                                    let tmpResults = [];
-                                    for(let i in geo.results){
-                                        tmpResults.push({
-                                            address:geo.results[i].formatted_address,
-                                            latitude:geo.results[i].geometry.location.lat,
-                                            longitude:geo.results[0].geometry.location.lng
-                                        });
-
-                                    }
-
-                                    setResults(tmpResults); 
-                                }else{
-                                    setResults([]);
-                                }
-                            }, 1000);
         }
+
+        setResults(tmpResults); 
+          }else{
+         setResults([]);
+          }
+        }, 1000);
+     }
     }, [searchText]);
 
      const handleCloseAction = () => {
          props.visibleAction(false);
      }
+
+     
 
      const handleClose = () => {
          setResults([]);
@@ -148,7 +150,14 @@ export default (props) => {
                      ))}
                      </ScrollView>
                  </ModalResults>
-                 <ModalAds></ModalAds>
+                 <ModalAds>
+
+                 <Text>123{markers.title}</Text>
+                            
+                            
+                  
+
+                 </ModalAds>
             </ModalArea>
 
         </Modal>

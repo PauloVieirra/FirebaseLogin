@@ -4,7 +4,7 @@ import 'firebase/database';
 
 
 let firebaseConfig = {
-    apiKey: "AIzaSyDxE0uYJyNcLwSFPH2vnNTeR55wpRU9jSU",
+    apiKey: "AIzaSyDxE0uYJyNcLwSFPH2vnNTeR55wpRU9jSU",//apiKey: "AIzaSyAYYAB47qIZ2s1MtkX_umORFDOtNGbzxDw",   
     authDomain: "appcar-306903.firebaseapp.com",
     databaseURL: "https://appcar-306903-default-rtdb.firebaseio.com",
     projectId: "appcar-306903",

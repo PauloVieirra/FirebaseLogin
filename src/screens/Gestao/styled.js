@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-
 const styles= StyleSheet.create({
 
   
@@ -14,7 +13,7 @@ const styles= StyleSheet.create({
       width:"100%",
       height:"30%",
       backgroundColor:"#fff",
-      justifyContent:'flex-end',
+      justifyContent:'center',
       alignItems:'center'
 
     },

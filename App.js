@@ -8,11 +8,12 @@ import AuthProvider from './src/contexs/auth';
 
 export default function App() {
   return (
+   
     <NavigationContainer>
       <AuthProvider>
          <Routes/>
       </AuthProvider>
-    </NavigationContainer>
+    </NavigationContainer> 
   );
 }
 

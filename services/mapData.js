@@ -1,3 +1,4 @@
+
 const Images = [
     { image: require("../assets/banners/ofice_1.png") },
     { image: require("../assets/banners/ofice_2.png") },
@@ -5,6 +6,7 @@ const Images = [
     { image: require("../assets/banners/ofice_4.png") },
     { image: require("../assets/banners/ofice_5.png") },
 ];
+
 
 export const markers = [
     {

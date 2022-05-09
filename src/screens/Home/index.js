@@ -1,6 +1,6 @@
-import  React, {useEffect, useRef, useState} from 'react';
-import MapView from 'react-native-maps';
-import {View,Platform,Text,Dimensions,StyleSheet, TouchableHighlight,TouchableOpacity,Animated,Image, ScrollView} from 'react-native';
+import  React, {useEffect, useState} from 'react';
+import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
+import {View,Platform,Text,Dimensions,StyleSheet, TouchableHighlight,TouchableOpacity,Animated,Image} from 'react-native';
 import styles from './styled';
 import { MapsAPI } from '../../services/apigoogle';
 import MapViewDirections from 'react-native-maps-directions';
@@ -9,15 +9,11 @@ import Geocoder from 'react-native-geocoding';
 import AddressModal from '../../components/modalhome/AddressModal';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
-import { locations, locGuincho } from '../../../services/Data';
-import CustomMarker from '../../components/Markers/CustomMarker';
-import CustomMarkerGui from '../../components/Markers/CustomMarkerGui';
-import { Marker } from 'react-native-maps';
-import { markers,  mapDarkStyle, mapStandardStyle } from '../../../services/mapData';
+import  {markers} from '../../../services/mapData';
 import StarRating from '../../components/StarRating';
-import * as Permissions from 'expo-permissions';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
@@ -25,7 +21,7 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 export default function Home() {
 
-  const map = useRef();
+  
   const api = useApi();
   const navigation = useNavigation();
 
@@ -35,11 +31,10 @@ export default function Home() {
   const [requestDistance, setRequestDistance] = useState(0);
   const [requesTime, setRequestTime] = useState(0);
   const [requestPrice, setRequestPrice] = useState(0);
-
   const [modaltitle, setModalTitle] = useState('');
   const [modalvisible, setModalVisible] = useState (false);
   const [modalField, setModalField] = useState ('');
-
+  const [controller, setController] = useState ('f');
   const [setLoading] = useState (false);
   
   const [mapLoc, setMapLoc] = useState({
@@ -55,7 +50,6 @@ export default function Home() {
         heading:0  
   });
 
-   //Montando categorias - depois mudar para componente
    const initialMapState = {
     markers,
     categories: [
@@ -137,7 +131,7 @@ export default function Home() {
     return { scale };
   });
 
-
+  const map = React.useRef(null);
   const _scrollView = React.useRef(null);
 
     useEffect(() => {
@@ -192,8 +186,9 @@ export default function Home() {
    const handleToClick = async() => {
           setModalTitle('Escolha um destino');
           setModalField('to');
-          setModalVisible(true);}
-
+          setModalVisible(true);
+        }
+ 
    const handleDirectionsReady = async (r) => {
           map.current.fitToCoordinates(r.coordinates, {
             edgePadding:{
@@ -236,7 +231,8 @@ export default function Home() {
   
           setMapLoc(fromLoc);
          }
-
+  
+  
   const handleModalClick = ( field, address) =>{
   const loc = {
         name:address.address,
@@ -244,7 +240,7 @@ export default function Home() {
            latitude:address.latitude,
            longitude:address.longitude,
         },
-            zoom:16,
+            zoom:18,
             pitch:0,
             altitude:0,
             heading:0
@@ -269,7 +265,7 @@ export default function Home() {
   const onMarkerPress = (mapEventData) => {
   const markerID = mapEventData._targetInst.return.key;
       
-          let x = (markerID * CARD_WIDTH) + (markerID * 30); 
+          let x = (markerID * CARD_WIDTH) + (markerID * 20); 
           if (Platform.OS === 'ios') {
             x = x - SPACING_FOR_CARD_INSET;
           }
@@ -282,13 +278,15 @@ export default function Home() {
     <View style={styles.container}>
       <MapView 
        ref={map}
+       provider={PROVIDER_GOOGLE}
        style={{width:'100%', height:'100%'}}
-       showsMyLocationButton={true}
        followsUserLocation={true}
+       showsMyLocationButton={true}
        loadingEnabled={true}
        camera={mapLoc}
        onRegionChangeComplete={handleMapChange}
         >  
+       
         {state.markers.map((marker, index) => {
           const scaleStyle = {
             transform: [
@@ -297,43 +295,29 @@ export default function Home() {
               },
             ],
           };
-          return (
-            <MapView.Marker key={index} coordinate={marker.coordinate} onPress={(e)=>onMarkerPress(e)}>
-              <Animated.View style={[styles.markerWrap]}>
-
-                
-                <Animated.Image
-                  source={require('../../assets/map_marker.png')}
-                  style={[styles.marker, scaleStyle]}
-                  resizeMode="cover"
-                />
-              </Animated.View>
-            </MapView.Marker>
-          );
-        })}
+   return (
+            
+    <MapView.Marker key={index} coordinate={marker.coordinate} onPress={(e)=>onMarkerPress(e)}>
+             
+      <Animated.View style={[styles.markerWrap]}>
+          <Animated.Image
+             source={require('../../assets/map_marker.png')}
+             style={[styles.marker, scaleStyle]}
+             resizeMode="cover"
+          />
+          </Animated.View>
+          </MapView.Marker>
+        );
+    })}
          
-              
-
-              {!toLoc.name &&
-                 locGuincho.map(marker => (
-                 <Marker coordinate = {{latitude: marker.latitude,longitude: marker.longitude}}>
-                <CustomMarkerGui item = {marker}/>
-                 </Marker>
-              
-                  ))
-                } 
-        
-    
-
-                 {fromLoc.center &&
-                 <MapView.Marker pinColor="#000" coordinate={fromLoc.center}/>
-                 } 
-                  {toLoc.center &&
-                 <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
-                 }
-                 
-                {showDirections &&
-                <MapViewDirections
+       {fromLoc.center &&
+         <MapView.Marker pinColor="#000" coordinate={fromLoc.center}/>
+           } 
+       {toLoc.center &&
+         <MapView.Marker pinColor="#000" coordinate={toLoc.center}/>
+            }
+       {showDirections &&
+          <MapViewDirections
                  lineDashPattern={[0]}
                  origin={fromLoc.center}
                  destination={toLoc.center}
@@ -342,177 +326,201 @@ export default function Home() {
                  apikey={MapsAPI}
                  onReady={handleDirectionsReady}
                  
-                />
-                 } 
+          />
+      } 
 
-        </MapView>
+      </MapView>
 
-<View style={styles.Rotacont}>
+     <View style={styles.Rotacont}>
       
-      <TouchableHighlight onPress={handleFromClick} underlayColor={"#EEE"} style={styles.RotaOrig}>
-           <View style={styles.RotaLabel}>
-             <View style={styles.CampoLabel}>
-               <View style={styles.RotaPointa}>
-                <View style={styles.RotaPoin}/>
-                 <Text style={{marginLeft:1}}>Ponto de partida</Text>
-                </View>
-                {fromLoc.name && 
-               <Text style={styles.textvaluea}>{fromLoc.name}</Text>
-                }
-                {!fromLoc.name &&
-               <Text style={{marginLeft:1}}>Procurando sua localização....</Text>
-                }
+      <View style={{
+       width:"100%", 
+       height:80,
+       flexDirection:'row',
+       alignItems:'center',
+       justifyContent:'center',
+       }} >
+     
+      <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
+      <AntDesign name="arrowleft" size={24} color="black" />
+      </TouchableOpacity>
+
+      <TouchableHighlight onPress={handleFromClick} underlayColor={"#000"} style={styles.RotaOrig}>
+     <View style={styles.CampoLabel}>
+          {fromLoc.name && 
+     <View style={styles.RotaPointa}>
+     <View style={styles.RotaPoin}/>
+         <Text style={{marginLeft:10}}>Ponto de partida</Text>
+     </View>
+          }
+
+          {fromLoc.name && 
+            <Text style={styles.textvaluea}>{fromLoc.name}</Text>
+          }
+          
+          {!fromLoc.name &&
+             <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}} >
+               <View style={styles.RotaPoinOff}/>
+             <Text style={{marginRight:70,fontSize:11}}>Procurando sua localização....</Text>
              </View>
-           </View>
+          }
+          </View>
       </TouchableHighlight>
+     </View>
+    
+     <View style={{
+       width:"100%", 
+       height:80,
+       alignItems:'center',
+       justifyContent:'center',
+       }} >
 
-     <TouchableHighlight onPress={handleToClick} underlayColor={"#EEE"} style={styles.RotaDest}>
-         <View style={styles.RotaLabel}>
-            <View style={styles.CampoLabel}>
-            <View style={styles.RotaPointab}>
-                      <View style={styles.RotaPoinn}/>
+      {!toLoc.name &&
+       <View style={{
+        marginTop:10,
+        marginBottom:10,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        width:"90%",
+        height:60,
+        backgroundColor:'#000 rgba(0,0,0,0.9)',
+        borderRadius:12,
+        borderWidth:1,
+        borderColor:'#000 rgba(0,0,0,0.2)',
+      }}>              
+                      
+     <View style={{
+        width:"10%", 
+        height:"100%",
+        position:'absolute', left:2,
+        borderTopLeftRadius:30,
+        borderBottomLeftRadius:30,
+        justifyContent:'center',
+        alignItems:'center'
+       }}>
+        <FontAwesome name="search" size={18} color="#fff" />
+     </View>
+        
+        <TouchableHighlight onPress={handleToClick}>
+         <Text style={{marginLeft:8, fontSize:20, color:"#fff"}}>Chamar guincho</Text>
+        </TouchableHighlight>
+       </View>
+        }
 
-                      {!toLoc.name &&
-                        <Text style={{marginLeft:1}}>Escolha uma oficina no mapa.</Text>
-                      }
-                      {toLoc.name &&
-                        <Text style={{marginLeft:1}}>Seu destino é:</Text>
-                      }
-                          
-                    </View>
+           
+           {toLoc.name &&   
+           <TouchableHighlight onPress={handleToClick} underlayColor={"#000"} style={styles.RotaDest}>
+     <View style={styles.CampoLabel}>
+           {toLoc.name &&
+     <View style={styles.RotaPointab}>
+     <View style={styles.RotaPoinn}/>
+            <Text style={{marginLeft:10}}>Seu destino é:</Text>
+     </View>
+           }
+           {toLoc.name &&
+     <View style={{
+              width:"100%",
+              height:"30%",
+              justifyContent:'center',
+              marginLeft:20
+              }}>
+              <Text style={{marginLeft:1, fontSize:11}}>{toLoc.name}</Text>
+     </View>
+              }      
+     </View>
+           </TouchableHighlight>
+            }
 
-                    {!toLoc.name &&
-                        <Text style={{marginLeft:1}}>Você pode clicar aqui para chamar um guincho</Text>
-                      }
+            
+     </View>
 
-                    {toLoc.name &&
-                        <Text style={{marginLeft:1}}>{toLoc.name}</Text>
-                       } 
-           </View>
-        </View>
-     </TouchableHighlight>
+     </View>
 
      {toLoc.name && 
-        <View style={styles.viewdetails}>
+     
+     <View style={styles.viewdetails}>
          
-            <View style={styles.Viewdet}> 
-                <Text style={{color:"#000", fontSize:15, }}>Distancia</Text>
-                <Text style={{color:"#000", fontSize:17,fontWeight: "bold"}}>{requestDistance > 0?`${requestDistance.toFixed(1).replace('.',',')}km`:'--'}</Text>
-            </View>
-            <View style={styles.Viewdet}> 
-                <Text style={{color:"#000", fontSize:15,}}>Tempo</Text>
-                <Text style={{color:"#000", fontSize:17,fontWeight: "bold"}}>{requesTime > 0?`${requesTime.toFixed(0)}mins`:'--'}</Text>
-            </View>
-            <View style={styles.Viewdet}>
-                <Text style={{color:"#000", fontSize:15,}}>Valor</Text>
-                <Text style={{color:"#000", fontSize:17,fontWeight: "bold"}}>{requestPrice > 0?`R$ ${requestPrice.toFixed(2).replace('.',',')}`:'--'}</Text>
-            </View>
-           
-        </View>
-}
+     <View style={styles.Viewdet}> 
+             <Text style={{color:"#000", fontSize:11, }}>Distancia</Text>
+             <Text style={{color:"#000", fontSize:14,fontWeight: "bold"}}>{requestDistance > 0?`${requestDistance.toFixed(1).replace('.',',')}km`:'--'}</Text>
+     </View>
+     <View style={styles.Viewdet}> 
+             <Text style={{color:"#000", fontSize:11,}}>Tempo</Text>
+             <Text style={{color:"#000", fontSize:14,fontWeight: "bold"}}>{requesTime > 0?`${requesTime.toFixed(0)}mins`:'--'}</Text>
+     </View>
+     <View style={styles.Viewdet}>
+             <Text style={{color:"#000", fontSize:11,}}>Valor</Text>
+             <Text style={{color:"#000", fontSize:14,fontWeight: "bold"}}>{requestPrice > 0?`R$ ${requestPrice.toFixed(2).replace('.',',')}`:'--'}</Text>
+     </View>
+     
+       {toLoc.name && 
+     <View style={styles.Viewdet}>
+        <TouchableOpacity style={styles.bntc}onPress={handleRequestCancel}>
+             <Text style={{color:"#eee", fontSize:15,}}  >Cancelar</Text>
+        </TouchableOpacity> 
+     </View>
+       }
+
+     </View>
+       } 
     
-             {toLoc.name && 
-               <View style={styles.viewdetailz}>
-               <TouchableOpacity style={styles.bntc}>
-                 <Text style={{color:"#eee", fontSize:15,}} onPress={handleRequestCancel}>X</Text>
-               </TouchableOpacity> 
-               </View>
-              }
+     <View style={styles.rodape}>
           
-           
-    </View>
-    
-             
-        
-                 <TouchableOpacity style={styles.bntsair}onPress={() => navigation.navigate('Pickup')}>
-                   <Text style={{color:"#FFF", fontSize:18,}}>Sair</Text>
-                   </TouchableOpacity>
-         
-                  
-          
-              
-               
-          
-          
-          <View style={styles.rodape}>
-           {!toLoc.name &&
-          <ScrollView
-              horizontal
-              scrollEventThrottle={1}
-              showsHorizontalScrollIndicator={false}
-              height={50}
-              style={styles.chipsScrollView}
-              contentInset={{ // iOS only
-                top:0,
-                left:0,
-                bottom:0,
-                right:20
-              }}
-              contentContainerStyle={{
-                paddingRight: Platform.OS === 'android' ? 20 : 0
-              }}
-            >
-              {state.categories.map((category, index) => (
-                <TouchableOpacity key={index} style={styles.chipsItem}>
-                  <Text>{category.name}</Text>
-                </TouchableOpacity>
-              ))}
-           </ScrollView>
-           }
-          {!toLoc.name && 
-           <Animated.ScrollView
-              ref={_scrollView}
-              horizontal
-              scrollEventThrottle={1}
-              showsHorizontalScrollIndicator={false}
-              style={stylex.scrollView}
-              pagingEnabled
-              snapToInterval={CARD_WIDTH + 20}
-              snapToAlignment="center"
-              contentInset={{ // iOS only
-                top:0,
-                left:SPACING_FOR_CARD_INSET,
-                bottom:0,
-                right:SPACING_FOR_CARD_INSET
-              }}
-              contentContainerStyle={{
-                paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0
-              }}
-              onScroll={Animated.event(
-                [
-                  {
-                    nativeEvent: {
-                      contentOffset: {
-                        x: mapAnimation,
-                      }
-                    },
-                  },
-                ],
-                {useNativeDriver: true}
-              )}
-            >
+       {!toLoc.name && 
+        <Animated.ScrollView
+        ref={_scrollView}
+        horizontal
+        scrollEventThrottle={1}
+        showsHorizontalScrollIndicator={false}
+        style={stylex.scrollView}
+        pagingEnabled
+        snapToInterval={CARD_WIDTH + 20}
+        snapToAlignment="center"
+        contentInset={{ // iOS only
+        top:0,
+        left:SPACING_FOR_CARD_INSET,
+        bottom:0,
+        right:SPACING_FOR_CARD_INSET
+      }}
+       contentContainerStyle={{
+       paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0
+      }}
+        onScroll={Animated.event(
+        [
+         {
+            nativeEvent: {
+            contentOffset: {
+            x: mapAnimation,
+             }
+            },
+           },
+          ],
+          {useNativeDriver: true}
+       )}>
+
         {state.markers.map((marker, index) =>(
-          <View style={stylex.card} key={index}>
-            <Image 
-              source={marker.image}
-              style={styles.cardImage}
-              resizeMode="cover"
-            />
-            <View style={styles.textContent}>
-              <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+     <View style={stylex.card} key={index}>
+        <Image 
+          source={marker.image}
+          style={styles.cardImage}
+          resizeMode="cover"
+        />
+     <View style={styles.textContent}>
+         <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
               <StarRating ratings={marker.rating} reviews={marker.reviews} />
-              <Text numberOfLines={1} style={styles.cardDescription}>{marker.description}</Text>
-              <View style={styles.button}>
-                <TouchableOpacity
-                  onPress={() => {}}
-                  style={[styles.signIn, {
-                    borderColor: '#FF6347',
-                    borderWidth: 1
-                  }]}
-                >
-                  <Text style={[styles.textSign, {
+         <Text numberOfLines={1} style={styles.cardDescription}>{marker.description}</Text>
+     <View style={styles.button}>
+         <TouchableOpacity onPress={() => navigation.navigate('Motorista')}
+            style={[styles.signIn, {
+            borderColor: '#FF6347',
+            borderWidth: 1
+          }]}
+         >
+                 
+           <Text style={[styles.textSign, {
                     color: '#FF6347'
-                  }]}>Order Now</Text>
+                  }]}>Ver mais</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -521,20 +529,17 @@ export default function Home() {
       </Animated.ScrollView>
       }
       
-              
-             {toLoc.name &&
-             <View style={styles.viewbtn}>
-             <TouchableOpacity style={styles.bntchamar}>
-             <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestGo}>Chamar Reboque</Text>
-             </TouchableOpacity> 
-           </View>
+      {toLoc.name &&
+     <View style={styles.viewbtn}>
+          <TouchableOpacity style={styles.bntchamar}>
+          <Text style={{color:"#FFF", fontSize:18,}} onPress={handleRequestCancel}>Confirmar guincho</Text>
+          </TouchableOpacity> 
+     </View>
              } 
-
-            
-           </View>
+     </View>
         
        
-          <AddressModal
+     <AddressModal
      title={modaltitle}
      visible={modalvisible}
      visibleAction={setModalVisible}
@@ -542,7 +547,7 @@ export default function Home() {
      clickAction={handleModalClick}
      />
 
-    </View>
+      </View>
     
   );}
 

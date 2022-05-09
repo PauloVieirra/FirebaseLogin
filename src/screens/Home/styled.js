@@ -16,14 +16,12 @@ const styles= StyleSheet.create({
       },
 
       Rotacont: {
-        position:'absolute', left:"3%",height:"3%",top:30,
-        width:"94%",
-        height:150,
-        backgroundColor: "#fff",
-        borderRadius:16,
-        paddingBottom:1,
-        paddingLeft:1,
-        paddingRight:1,
+        position:'absolute',top:"3%",
+        width:"100%",
+        alignItems:'center',
+        justifyContent:'flex-end',
+        backgroundColor:"#fff"
+        
       },
     
       viewdetail:{
@@ -41,20 +39,21 @@ const styles= StyleSheet.create({
     },
       viewdetailz:{
         flexDirection: "column",
-        position:'absolute',left:"90%",height:"3%",top:110,
+        position:'absolute',left:120, top:300,
         width:30,
         height:30,
     },
     
       viewdetails:{
+        paddingLeft:20,
+        paddingRight:20,
+          position:'absolute',top:180,
           alignItems:'center',
           flexDirection: "row",
-          marginTop:5,
           width:"100%",
-          height:80,
-          backgroundColor:"#eee",
+          height:50,
+          backgroundColor:"#fff",
           opacity: 0.9,
-          paddingTop:1,
       },
       viewdetailsg:{
           position:'absolute',top:180,
@@ -100,85 +99,118 @@ const styles= StyleSheet.create({
           height:45,
       },
       bntsair:{
-        position:'absolute',top:280,left:"3%",
+        marginRight:10,
         alignItems:'center',
         justifyContent:'center',
         borderRadius:30,
-        backgroundColor:"#000",
-        width:45,
-        height:45,
-    },
-    
-      bntc:{
-        alignItems:'center',
-        justifyContent:'center',
-        borderRadius:30,
-        backgroundColor:"#c20000",
+        backgroundColor:"#fff",
         width:25,
         height:25,
     },
+
+    cancelar:{
+      justifyContent:'center',
+      alignItems:'center',
+      width:30,
+      height:30,
+      backgroundColor:'rgba(0, 0, 0, 0.5)',
+      marginBottom:40,
+  },
+
+    bntcancelar:{
+      position:'absolute',top:280,left:"30%",
+      alignItems:'center',
+      justifyContent:'center',
+      borderRadius:30,
+      backgroundColor:"#000",
+      width:45,
+      height:45,
+  },
+    
+      bntc:{
+       
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor:"#000",
+        width:"100%",
+        height:"100%",
+        zIndex:150
+    },
     
       RotaPointa:{
-       width:140,
-       height:20,
-       marginBottom:2,
-       flexDirection:'row',
-       alignContent:'center',
-       backgroundColor:"#eee",
-       borderRadius:13,
-      },
+        padding:1,
+      width:"100%",
+      height:20,
+      flexDirection:'row',
+      alignContent:'center',
+     },
     
       RotaPointab:{
-        width:"98%",
-        height:20,
-        marginBottom:2,
+        width:"100%",
         flexDirection:'row',
         alignContent:'center',
-        backgroundColor:"#eee",
-        borderRadius:13,
        },
     
       
       RotaPoin:{
-          width:20,
-          height:20,
-          backgroundColor:"#000",
-          borderRadius:13,
-         },
+        width:12,
+        height:12,
+        marginLeft:10,
+        backgroundColor:"#73FFB6",
+        borderRadius:13,
+       },
+
+       RotaPoinOff:{
+        width:12,
+        height:12,
+        marginRight:"20%",
+        backgroundColor:"#FF6054",
+        borderRadius:13,
+       },
     
          RotaPoinn:{
-          width:20,
-          height:20,
-          backgroundColor:"#EEE000",
+          width:12,
+          height:12,
+          marginLeft:10,
+          backgroundColor:"#73FFB6",
           borderRadius:13,
          },
     
       RotaOrig:{
-       justifyContent:'center',
-       height:"50%",
-       padding:5,
-       borderBottomColor:"#eee",
-       borderBottomWidth:1,
-      },
+        position:'relative',top:20,
+        marginBottom:30,
+        justifyContent:'center',
+        width:"80%",
+        height:60,
+        padding:2,
+        borderWidth:2,
+        borderRadius:15,
+        borderColor:'#000 rgba(0,0,0,0.2)',
+    },
     
       RotaDest:{
           justifyContent:'center',
-          height:"50%",
-          padding:5,
-          borderBottomColor:"#eee",
-          borderBottomWidth:1,
+          width:"90%",
+          height:60,
+          padding:2,
+          borderWidth:2,
+          borderRadius:15,
+          borderColor:'#000 rgba(0,0,0,0.2)',
       },
     
       RotaLabel:{
           flexDirection:'row',
-          height:"100%",
+          height:"80%",
       },
       CampoLabel:{
-         width:"100%"
+         flex:1,
+         alignItems:'center',
+         justifyContent:'center',
+         marginBottom:5,
       },
       textvaluea:{
-        fontSize:15,
-        color:"#131313"
+        fontSize:11,
+        color:"#131313",
     },
     LoadingArea:{
       position:'absolute',left:0,top:0,right:0,bottom:0,
@@ -265,8 +297,10 @@ const styles= StyleSheet.create({
       color: "#444",
     },
     markerWrap: {
-      width: 150,
-      height: 200,
+      alignItems: "center",
+      justifyContent: "center",
+      width:50,
+      height:50,
     },
     marker: {
       width: 23,
