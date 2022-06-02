@@ -8,15 +8,15 @@ export default function Listagem({data}){
  return (
    <View 
    style={{
-     width:"80%",
-     height:90, 
+     width:"100%",
+     height:120, 
      padding:5,
      backgroundColor:"#fff",
       marginTop:10, 
       flexDirection:'row', 
       borderWidth:1,
       borderColor:"#787257",
-      borderRadius:25}}>
+      borderRadius:8}}>
       
        <View 
        style={{

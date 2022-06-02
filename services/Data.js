@@ -7,6 +7,7 @@ export const locations =
                 especialidade:'Ford',
                 key:0
         },
+
         {
                 title: 'Location 1', latitude: -15.869455, 
                 longitude: -47.961989,
@@ -14,6 +15,7 @@ export const locations =
                 especialidade:'Ford',
                 key:1
         },
+
         {
                 title: 'Location 1', latitude: -15.862314,
                 longitude: -48.001784,

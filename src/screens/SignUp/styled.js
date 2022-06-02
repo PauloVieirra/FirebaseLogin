@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 export const Background = styled.View`
 flex:1;
-background-color:#eee;
+background-color:#000 rgba(0,0,0,0.75);
 `;
 
 export const Container = styled.KeyboardAvoidingView`
@@ -11,10 +11,13 @@ align-items:center;
 justify-content:center;
 `;
 
-export const Logo = styled.Image`
-margin-bottom:15px;
-width:100px;
-height:180px;
+export const UserImg = styled.Image`
+margin-bottom:40px;
+margin-top:40px;
+width:120px;
+height:120px;
+border-radius:60px;
+background-color:#eee;
 
 
 `;
@@ -25,7 +28,7 @@ width:90%;
 `;
 
 export const Input = styled.TextInput.attrs({
-     placeholderTextColor: 'rgba(0,0,0,0.5)'
+    placeholderTextColor: 'rgba(0,0,0,0.70)'
 })`
 font-size:17px;
 color:#fff;
@@ -33,7 +36,7 @@ margin-bottom:15px;
 padding:10px;
 border-radius:7px;
 width:90%;
-background: rgba(0,0,0,0.20)`;
+background: rgba(255,255,255,0.70)`;
 
 export const AreaInputCar = styled.View`
 flex-direction:row;
@@ -42,7 +45,7 @@ justify-content:space-between;
 width:80%;
 `;
 export const InputCar = styled.TextInput.attrs({
-    placeholderTextColor: 'rgba(0,0,0,0.5)'
+    placeholderTextColor: 'rgba(0,0,0,0.70)'
 })`
 font-size:17px;
 color:#fff;
@@ -50,7 +53,7 @@ margin-bottom:15px;
 padding:10px;
 border-radius:7px;
 width:47%;
-background: rgba(0,0,0,0.20)`;
+background: rgba(255,255,255,0.70)`;
 
 export const AreRecovUp = styled.View`
 align-items:center;
@@ -74,11 +77,11 @@ color:#000;
 export const BtnLogin = styled.TouchableOpacity`
 width:80%;
 height:45px;
-background-color:#fff;
+background-color:#EBA054;
 border-radius:12px;
 align-items:center;
 justify-content:center;
-margin-top:30;
+margin-top:15px;
 `;
 export const TextLogin = styled.Text`
 font-size:20;

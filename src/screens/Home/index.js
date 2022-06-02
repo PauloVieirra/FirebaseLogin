@@ -1,6 +1,6 @@
 import  React, {useEffect, useState} from 'react';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import {View,Platform,Text,Dimensions,StyleSheet, TouchableHighlight,TouchableOpacity,Animated,Image} from 'react-native';
+import {View,Platform,Text,Dimensions,StyleSheet, TouchableHighlight,TouchableOpacity,Animated,Image,StatusBar} from 'react-native';
 import styles from './styled';
 import { MapsAPI } from '../../services/apigoogle';
 import MapViewDirections from 'react-native-maps-directions';
@@ -10,9 +10,9 @@ import AddressModal from '../../components/modalhome/AddressModal';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import  {markers} from '../../../services/mapData';
+import CustomMarker from '../../components/Markers/CustomMarker';
 import StarRating from '../../components/StarRating';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
-
 const { width } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
@@ -214,11 +214,6 @@ export default function Home() {
                tolng:toLoc.longitude});
 
          setLoading(false);
-         if(!driver.error){
-           //Encontrou Motorista
-         }else{
-           alert(driver.error)
-    }
 }
 
          
@@ -276,6 +271,9 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor="#000"/>
       <MapView 
        ref={map}
        provider={PROVIDER_GOOGLE}
@@ -301,11 +299,12 @@ export default function Home() {
              
       <Animated.View style={[styles.markerWrap]}>
           <Animated.Image
-             source={require('../../assets/map_marker.png')}
+             
              style={[styles.marker, scaleStyle]}
              resizeMode="cover"
           />
           </Animated.View>
+          <CustomMarker item = {marker}/>
           </MapView.Marker>
         );
     })}

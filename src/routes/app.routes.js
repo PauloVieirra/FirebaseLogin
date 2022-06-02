@@ -24,7 +24,7 @@ function AppRoutes(){
            <AppStack.Screen name="Market" component={Market}options={{headerShown: false}}/>
            <AppStack.Screen name="Gestao" component={Gestao}options={{headerShown: false}}/>
            <AppStack.Screen name="AddressModal" component={AddressModal}options={{headerShown: false}}/>
-           <AppStack.Screen name="Motorista" component={Motorista}options={{headerShown: false}}/>
+           <AppStack.Screen name="Motorista" component={Motorista} options={{title:false}}/>
            
            <AppStack.Screen name="Amigao" component={Amigao}options={{headerShown: false}}/>
            <AppStack.Screen name="Guinchos" component={Guinchos}options={{headerShown: false}}/>

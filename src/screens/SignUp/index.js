@@ -1,14 +1,8 @@
 import React, {useState, useContext} from 'react';
 import { AuthContext } from '../../contexs/auth';
-import { Platform } from 'react-native';
-import {Background,
-   Container,
-   TextLogin,
-    AreaInput,
-     Input,
-     InputCar,
-     AreaInputCar,
-     BtnLogin} from './styled';
+import { Platform, ScrollView } from 'react-native';
+import {Background,Container,TextLogin,AreaInput, Input, InputCar,AreaInputCar,BtnLogin, UserImg} from './styled';
+import Header from '../../components/Header';
 
 export default function SignUp() {
 
@@ -19,21 +13,27 @@ export default function SignUp() {
   const [modelo, setModelo] = useState('');
   const [ano, setAno] = useState('');
   const [cor, setCor] = useState('');
+  const [rg, setRg] = useState('');
+  const [telefone, setTelefone] = useState('');
 
   const { signUp } = useContext(AuthContext);
 
   function handleSignUp(){
-    signUp(email, password, nome,veiculo,ano,modelo,cor);
+    signUp(email, password, nome,veiculo,ano,modelo,cor,telefone, rg);
   }
  
   
  return (
    <Background
-   behavior={Platform.OS === 'ios' ? 'padding' : ''}
-   enabled
-   >
+   behavior={Platform.OS === 'ios' ? 'padding' : ''} enabled>
      <>
+     <Header/>
+     <ScrollView style={{marginTop:1}}>
        <Container>
+
+         <UserImg></UserImg>
+
+          
   
            <AreaInput>
            <Input
@@ -57,6 +57,23 @@ export default function SignUp() {
            value={password}
            onChangeText={(text) => setPassword(text)}
            />
+           <Input
+           placeholder="Telefone"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={telefone}
+           keyboardType="numeric"
+           onChangeText={(text) => setTelefone(text)}
+           />
+           <Input
+           placeholder="RG"
+           autoCorrect={false}
+           autoCapitalize="none"
+           value={rg}
+           keyboardType="numeric"
+           onChangeText={(text) => setRg(text)}
+           />
+           
            </AreaInput>
 
            <AreaInputCar>
@@ -98,7 +115,9 @@ export default function SignUp() {
              <TextLogin>Cadastrar</TextLogin>
            </BtnLogin>
        </Container>
+       </ScrollView>
        </>
    </Background>
+
   );
 }

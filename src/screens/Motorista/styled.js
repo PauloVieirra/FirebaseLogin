@@ -34,7 +34,7 @@ const styles= StyleSheet.create({
       titleone:{
         fontSize:22,
         fontSize:20,
-        marginTop:80
+        marginTop:20
       },
       seachMyLocation:{
         width:"90%",
@@ -44,7 +44,7 @@ const styles= StyleSheet.create({
 
       scroller:{
        width:"100%",
-       height:"70%",
+       height:"80%",
       }
  
   });

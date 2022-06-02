@@ -10,7 +10,8 @@ import {Background,
      RecoveryText, 
      SingUpText,
      Logo,
-     BtnLogin} from './styled';
+     BtnLogin,
+     CadText} from './styled';
 
 
 
@@ -29,6 +30,8 @@ export default function SignIn() {
  return (
    <Background>
        <Container>
+      
+            
              <Logo source={require('../../assets/loggo.png')}/>
   
            <AreaInput>
@@ -48,6 +51,7 @@ export default function SignIn() {
            autoCapitalize="none"
            value={password}
            onChangeText={(text) => setPassword(text)}
+           secureTextEntry={true}
            />
            </AreaInput>
 
@@ -56,11 +60,16 @@ export default function SignIn() {
            </BtnLogin>
 
            <AreRecovUp>
-             <RecoveryText onPress={() => navigation.navigate('SignUp')}>
+             <CadText onPress={() => navigation.navigate('SignUp')}>
              <SingUpText>Criar minha conta</SingUpText>
+             </CadText>
+             <RecoveryText onPress={() => navigation.navigate('Recovery')}>
+             <SingUpText>Não consigo entrar</SingUpText>
              </RecoveryText>
            </AreRecovUp>
+                  
 
+                 
        </Container>
    </Background>
   );

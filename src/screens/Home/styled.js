@@ -16,7 +16,7 @@ const styles= StyleSheet.create({
       },
 
       Rotacont: {
-        position:'absolute',top:"3%",
+        position:'absolute',top:"0%",
         width:"100%",
         alignItems:'center',
         justifyContent:'flex-end',
@@ -47,12 +47,14 @@ const styles= StyleSheet.create({
       viewdetails:{
         paddingLeft:20,
         paddingRight:20,
-          position:'absolute',top:180,
+          position:'absolute',top:160,
           alignItems:'center',
           flexDirection: "row",
           width:"100%",
           height:50,
-          backgroundColor:"#fff",
+          backgroundColor:"#eee",
+          borderBottomWidth:1,
+          borderBottomColor:'#5d5d5d',
           opacity: 0.9,
       },
       viewdetailsg:{
@@ -138,7 +140,7 @@ const styles= StyleSheet.create({
     },
     
       RotaPointa:{
-        padding:1,
+      padding:1,
       width:"100%",
       height:20,
       flexDirection:'row',

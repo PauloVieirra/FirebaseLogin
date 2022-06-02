@@ -52,8 +52,7 @@ export default function components() {
 
 const styles = StyleSheet.create({
    container:{
-    flexDirection:'row',
-    width:"97%",
+    width:"96%",
     height:"100%",
     padding:2, 
     margin:6,

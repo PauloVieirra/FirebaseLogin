@@ -7,22 +7,21 @@ import { markers } from "../../../services/mapData";
 
 const ModalArea = styled.View`
 width:100%;
-height:50%;
-background-color:#fff;
+height:60%;
+background-color:#eee;
 align-items:center;
 `;
 
 const Head = styled.View`
 width:100%;
 height:80px;
-background-color:#000;
 justify-content:center;
 align-items:center;
 `; 
 
 const ModalAds = styled.View`
 width:100%;
-height:100%;
+height:80%;
 background-color:#eee;
 `; 
 
@@ -42,11 +41,13 @@ width:25px;
 height:25px;
 justify-content:center;
 align-items:center;
-background-color:#eee;
+background-color:#FA1208;
 border-radius:20px;
 `;
 
-const ModalCloseText = styled.Text``;
+const ModalCloseText = styled.Text`
+color:#fff;
+`;
 
 const ModalInput = styled.TextInput`
 width:250px;
@@ -72,7 +73,7 @@ font-size:14px;
 
 let timer;
 
-export default (props) => {
+export default (props,route) => {
 
     const [results, setResults] = useState ([]);
     const [searchText, setSearchText] = useState('');

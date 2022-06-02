@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-ads-admob",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ],
     "name": "osk",
     "slug": "osk",
     "version": "1.0.0",
@@ -22,9 +30,11 @@
     "android": {
       "package": "com.vieirajjr.osk",
       "config": {
+        "googleMobileAdsAppId": "ca-app-pub-5250847692952265/9567002638",
         "googleMaps": {
           "apiKey": "AIzaSyAuBgIsrK6kfU-OgixTRYxgpSdYegilyfU"
         }
+        
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

@@ -41,9 +41,17 @@ function AuthProvider({children}){
                 let data = {
                   uid: uid,
                   nome: snapshot.val().nome,
+                  veiculo: snapshot.val().veiculo,
+                  modelo: snapshot.val().modelo,
+                  cor: snapshot.val().cor,
+                  ano: snapshot.val().ano,
+                  revisao: snapshot.val().revisao,
+                  selo: snapshot.val().selo,
+                  gps: snapshot.val().gps,
+                  telefone: snapshot.val().telefone,
+                  rg: snapshot.val().rg,
+                  tipo: snapshot.val().tipo,
                   email: value.user.email,
-                 
-
                 };
                  
                 setUser(data);
@@ -70,7 +78,7 @@ function AuthProvider({children}){
 
 
     //Cadastrando usuario
-    async function signUp(email, password, nome, veiculo, ano, modelo, cor){
+    async function signUp(email, password, nome, veiculo, ano, modelo, cor, telefone,rg){
         await firebase.auth().createUserWithEmailAndPassword(email,password)
         .then(async (value)=>{
             let uid = value.user.uid;
@@ -80,6 +88,8 @@ function AuthProvider({children}){
                 modelo: modelo,
                 ano: ano,
                 cor: cor,
+                telefone: telefone,
+                rg: rg
                 
             })
             .then(()=>{
@@ -87,13 +97,19 @@ function AuthProvider({children}){
                     uid: uid,
                     nome: nome,
                     email: value.user.email,
-                    
+                    telefone: telefone, 
+                    rg: rg,
+                    veiculo: veiculo,
+                    ano: ano,
+                    cor: cor,
+                    modelo: modelo,  
                 };
                 setUser(data);
                 storageUser(data);
             })
         })
     }
+    console.log(user);
 
     //Cadastro Amigão
     async function cadAmigao(nome,telefone, cidade){
@@ -115,10 +131,11 @@ function AuthProvider({children}){
       }
 
     return(
-        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut,cadAmigao }}>
+        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut,cadAmigao,  }}>
             {children}
-        </AuthContext.Provider>   
+        </AuthContext.Provider>  
        );
+       
 }
 
 export default AuthProvider;
