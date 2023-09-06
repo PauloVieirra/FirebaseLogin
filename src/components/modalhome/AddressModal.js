@@ -3,7 +3,7 @@ import {Modal,Text, ScrollView} from 'react-native';
 import styled from "styled-components/native";
 import { MapsAPI } from "../../services/apigoogle";
 import Geocoder from "react-native-geocoding";
-import { markers } from "../../../services/mapData";
+import { markeron } from "../../services/mapData";
 
 const ModalArea = styled.View`
 width:100%;
@@ -153,7 +153,7 @@ export default (props,route) => {
                  </ModalResults>
                  <ModalAds>
 
-                 <Text>123{markers.title}</Text>
+                 <Text>123{markeron}</Text>
                             
                             
                   

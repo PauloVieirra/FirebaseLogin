@@ -1,141 +1,136 @@
-import React, {useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import firebase from '../services/firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext({});
 
-function AuthProvider({children}){
-    const[user, setUser] = useState(null);
+function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [usuarios, setUsuarios] = useState([]);
-    const [amigao, setAmigao] = useState([]);
     const [nome, setNome] = useState('');
     const [telefone, setTelefone] = useState('');
     const [cidade, setCidade] = useState('');
+    const [darkMode, setDarkMode] = useState(false);
 
-    useEffect(()=> {
+    useEffect(() => {
+        async function loadStorage() {
+            try {
+                const storageUser = await AsyncStorage.getItem('Auth_user');
 
-        async function loadStorage(){
-            const storageUser = await AsyncStorage.getItem('Auth_user');
- 
-            if(storageUser){
-                setUser(JSON.parse(storageUser));
+                if (storageUser) {
+                    setUser(JSON.parse(storageUser));
+                }
+            } catch (error) {
+                console.error("Error loading storage:", error);
+            } finally {
                 setLoading(false);
             }
- 
-            setLoading(false);
         }
-        
-        loadStorage()
-        
-     }, []);
 
+        loadStorage();
+    }, []);
 
-    //Logar usuario
-    async function signIn(email, password){
-        await firebase.auth().signInWithEmailAndPassword(email,password)
-        .then(async (value)=>{
-            let uid = value.user.uid;
-            await firebase.database().ref('users').child(uid).once('value')
-            .then((snapshot)=>{
-                let data = {
-                  uid: uid,
-                  nome: snapshot.val().nome,
-                  veiculo: snapshot.val().veiculo,
-                  modelo: snapshot.val().modelo,
-                  cor: snapshot.val().cor,
-                  ano: snapshot.val().ano,
-                  revisao: snapshot.val().revisao,
-                  selo: snapshot.val().selo,
-                  gps: snapshot.val().gps,
-                  telefone: snapshot.val().telefone,
-                  rg: snapshot.val().rg,
-                  tipo: snapshot.val().tipo,
-                  email: value.user.email,
-                };
-                 
-                setUser(data);
-                storageUser(data); 
-            })
-        })
-        .catch((error)=> {
+    async function signIn(email, password) {
+        try {
+            const { user: firebaseUser } = await firebase.auth().signInWithEmailAndPassword(email, password);
+            const uid = firebaseUser.uid;
+            const snapshot = await firebase.database().ref('users').child(uid).once('value');
+            const userData = { uid, ...snapshot.val(), email: firebaseUser.email };
+
+            setUser(userData);
+            storageUser(userData);
+        } catch (error) {
+            console.error("Error signing in:", error);
             alert(error.code);
-        });
+        }
     }
 
-    async function storageUser(data){
-        await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
+    async function storageUser(data) {
+        try {
+            await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
+        } catch (error) {
+            console.error("Error storing user data:", error);
+        }
     }
 
-    async function signOut(){
-        await firebase.auth().signOut();
-        await AsyncStorage.clear()
-        .then( () => {
-           setUser(null); 
-        })
-
+    async function signOut() {
+        try {
+            await firebase.auth().signOut();
+            await AsyncStorage.clear();
+            setUser(null);
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
     }
 
-
-    //Cadastrando usuario
-    async function signUp(email, password, nome, veiculo, ano, modelo, cor, telefone,rg){
-        await firebase.auth().createUserWithEmailAndPassword(email,password)
-        .then(async (value)=>{
-            let uid = value.user.uid;
-            await firebase.database().ref('users').child(uid).set({
-                nome: nome,
-                veiculo: veiculo,
-                modelo: modelo,
-                ano: ano,
-                cor: cor,
-                telefone: telefone,
-                rg: rg
-                
-            })
-            .then(()=>{
-                let data = {
-                    uid: uid,
-                    nome: nome,
-                    email: value.user.email,
-                    telefone: telefone, 
-                    rg: rg,
-                    veiculo: veiculo,
-                    ano: ano,
-                    cor: cor,
-                    modelo: modelo,  
-                };
-                setUser(data);
-                storageUser(data);
-            })
-        })
-    }
-    console.log(user);
-
-    //Cadastro Amigão
-    async function cadAmigao(nome,telefone, cidade){
-        if(nome !== '' & telefone !== '' & cidade !== ''){
-          let amigao = await firebase.database().ref('amigao');
-          let chave = amigao.push().key;
-    
-          amigao.child(chave).set({
-            nome: nome,
-            telefone: telefone,
-            cidade: cidade
+    async function signUp(email, password, nome) {
+        try {
+          setLoading(true);
+      
+          const emailRegex = /^[a-zA-Z0-9._-]+@(?:[a-zA-Z0-9.-]+\.)+(com|com\.br)$/;
+          if (!emailRegex.test(email)) {
+            setLoading(false);
+            return { success: false, errorCode: 'auth/invalid-email' };
+          }
+      
+          const { user: firebaseUser } = await firebase.auth().createUserWithEmailAndPassword(email, password);
+          const uid = firebaseUser.uid;
+          await firebase.database().ref('users').child(uid).set({
+            nome, email
           });
-    
-          alert('Cadastrado com sucesso!');
-          setTelefone('');
-          setNome('');
-          setCidade('');
+          const userData = { uid, nome, email: firebaseUser.email };
+      
+          setUser(userData);
+          storageUser(userData);
+          setLoading(false);
+      
+          return { success: true };
+        } catch (error) {
+          setLoading(false);
+      
+          switch (error.code) {
+            case 'auth/email-already-in-use':
+              return { success: false, errorCode: 'auth/email-already-in-use' };
+            case 'auth/invalid-email':
+              return { success: false, errorCode: 'auth/invalid-email' };
+            case 'auth/weak-password':
+              return { success: false, errorCode: 'auth/weak-password' };
+            default:
+              return { success: false };
+          }
         }
       }
+      
+      
+    
+    
 
-    return(
-        <AuthContext.Provider value={{ signed: !!user , user, signUp, signIn, loading,signOut,cadAmigao,  }}>
+    async function cadAmigao(nome, telefone, cidade) {
+        if (nome !== '' && telefone !== '' && cidade !== '') {
+            try {
+                const amigaoRef = firebase.database().ref('amigao');
+                const newAmigaoRef = amigaoRef.push();
+                const chave = newAmigaoRef.key;
+
+                await newAmigaoRef.set({ nome, telefone, cidade });
+
+                alert('Cadastrado com sucesso!');
+                setNome('');
+                setTelefone('');
+                setCidade('');
+            } catch (error) {
+                console.error("Error registering Amigão:", error);
+            }
+        }
+    }
+
+  
+
+    return (
+        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, loading, signOut, cadAmigao, darkMode, setDarkMode }}>
             {children}
-        </AuthContext.Provider>  
-       );
-       
+        </AuthContext.Provider>
+    );
 }
 
 export default AuthProvider;

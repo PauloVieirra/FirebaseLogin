@@ -1,123 +1,178 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../contexs/auth';
-import { Platform, ScrollView } from 'react-native';
-import {Background,Container,TextLogin,AreaInput, Input, InputCar,AreaInputCar,BtnLogin, UserImg} from './styled';
+import {Text, View, TextInput,KeyboardAvoidingView,TouchableOpacity, Dimensions } from 'react-native';
 import Header from '../../components/Header';
+import style from './styled';
+  import styles from '../GlobalStyles';
+import stylesDark from '../GlobalStylesDark';
+import { Pressable } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons, Entypo, ArrowLeft  } from '@expo/vector-icons';
 
 export default function SignUp() {
-
-  const [nome,setNome] = useState('');
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [veiculo, setVeiculo] = useState('');
-  const [modelo, setModelo] = useState('');
-  const [ano, setAno] = useState('');
-  const [cor, setCor] = useState('');
-  const [rg, setRg] = useState('');
-  const [telefone, setTelefone] = useState('');
-
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [nomeError, setNomeError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { darkMode, setDarkMode } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  
   const { signUp } = useContext(AuthContext);
 
-  function handleSignUp(){
-    signUp(email, password, nome,veiculo,ano,modelo,cor,telefone, rg);
-  }
- 
   
- return (
-   <Background
-   behavior={Platform.OS === 'ios' ? 'padding' : ''} enabled>
-     <>
-     <Header/>
-     <ScrollView style={{marginTop:1}}>
-       <Container>
+  const appStyles = darkMode ? stylesDark : styles; 
+  const windowHeight = Dimensions.get('window').height;
 
-         <UserImg></UserImg>
+  const inputErrorStyle = {
+    flexDirection:'row',
+    width:'90%',
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor: 'red',
+    borderRadius:8,
+    marginBottom:15,
+  };
 
+
+  const handleSignUp = async () => {
+    let errorMessage = '';
+
+    setNomeError(!nome);
+    setEmailError(!email);
+    setPasswordError(!password);
+    setConfirmPasswordError(!confirmPassword);
+
+    if (!nome || !email || !password || !confirmPassword) {
+      errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
+    } else if (password !== confirmPassword) {
+      errorMessage = 'Senhas diferentes, insira senhas iguais.';
+    } else {
+      setLoading(true);
+      const signUpResult = await signUp(email, password, nome);
+      setLoading(false);
+
+      if (!signUpResult.success) {
+        switch (signUpResult.errorCode) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'O email informado já está em uso por outro usuário.';
+            setEmailError(true);
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'O email informado não está em um formato válido.';
+            setEmailError(true);
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'A senha deve ter no mínimo 6 caracteres.';
+            setPasswordError(true);
+            break;
+          default:
+            errorMessage = 'Ocorreu um erro ao cadastrar. Por favor, tente novamente.';
+            break;
+        }
+      }
+    }
+    setErrorMessage(errorMessage);
+
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 30000);
+    }
+  };
+  
+  
+  
+
+  return ( 
+    <>
+  <View style={[appStyles.background,{ height: (windowHeight * 0.2) - 80 }]}>
+  <View style={{position:'absolute', top:20, left:20, zIndex:110}}><AntDesign name="back" size={24} color="black"/></View> 
+  <Header />
+  <View style={appStyles.container}>
+            <View style={styles.viewtittle}>
+              <Text style={styles.textTittlePrimary}>Criar conta</Text>
+             
+            </View>
           
-  
-           <AreaInput>
-           <Input
-           placeholder="Nome"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={nome}
-           onChangeText={(text) => setNome(text)}
-           />
-           <Input
-           placeholder="E-mail"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={email}
-           onChangeText={(text) => setEmail(text)}
-           />
-           <Input
-           placeholder="Senha"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={password}
-           onChangeText={(text) => setPassword(text)}
-           />
-           <Input
-           placeholder="Telefone"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={telefone}
-           keyboardType="numeric"
-           onChangeText={(text) => setTelefone(text)}
-           />
-           <Input
-           placeholder="RG"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={rg}
-           keyboardType="numeric"
-           onChangeText={(text) => setRg(text)}
-           />
-           
-           </AreaInput>
+          <View style={styles.areaInput}>
+          <View style={[styles.viewinput, styles.shadowProp, emailError && inputErrorStyle]}>
+            
+            
+              <Ionicons name="person" size={20} style={styles.icon}/>
+              <TextInput
+                style={styles.input}
+                placeholder="Nome"
+                autoCorrect={false}
+                autoCapitalize="none"
+                value={nome}
+                onChangeText={(text) => {
+                setNome(text);
+                setNomeError(false);
+                }}
+        />
+            </View>
+            <View style={[styles.viewinput, styles.shadowProp]}
+         
+            >
+               <Entypo name="email" size={20}  style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="E-mail"
+                autoCorrect={false}
+                autoCapitalize="none"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+              />
+            </View>
+            <View style={[styles.viewinput, styles.shadowProp]}
+            
+            >
+              <Ionicons name="key-outline" size={20}style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                autoCorrect={false}
+                autoCapitalize="none"
+                secureTextEntry
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+              />
+            </View>
+            <View style={[styles.viewinput, styles.shadowProp]}
+            
+            >
+              <Ionicons name="key-outline" size={20}style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Confirme a Senha"
+                autoCorrect={false}
+                autoCapitalize="none"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={(text) => setConfirmPassword(text)}
+              />
+            </View>
+          </View>
+          {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+        </View>
 
-           <AreaInputCar>
-           <InputCar
-           placeholder="Veiculo"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={veiculo}
-           onChangeText={(text) => setVeiculo(text)}
-           />
-
-            <InputCar
-           placeholder="Ano"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={ano}
-           onChangeText={(text) => setAno(text)}
-           />
-           </AreaInputCar>
-           <AreaInputCar>
-           <InputCar
-           placeholder="Modelo"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={modelo}
-           onChangeText={(text) => setModelo(text)}
-           />
-
-            <InputCar
-           placeholder="Cor"
-           autoCorrect={false}
-           autoCapitalize="none"
-           value={cor}
-           onChangeText={(text) => setCor(text)}
-           />
-           </AreaInputCar>
-
-           <BtnLogin onPress={handleSignUp}>
-             <TextLogin>Cadastrar</TextLogin>
-           </BtnLogin>
-       </Container>
-       </ScrollView>
-       </>
-   </Background>
-
+       <View style={style.viewbase}>
+          <Pressable style={[styles.btnPrimary, styles.shadowProp]} onPress={handleSignUp}>
+            <Text style={appStyles.textglobalPrimary}>Cadastrar</Text>
+          </Pressable>
+          
+            <TouchableOpacity style={{height:60, justifyContent:'center' }}>
+               <Text style={appStyles.textglobalSecundary}>Já tem uma conta? faça o Login </Text>
+            </TouchableOpacity>
+       </View>
+       
+      </View>
+      </>
   );
+  
 }

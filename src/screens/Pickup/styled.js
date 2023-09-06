@@ -13,7 +13,7 @@ const styles= StyleSheet.create({
       width:"100%",
       height:"30%",
       alignItems:'center',
-      opacity: 0.9,
+      opacity: 0.5,
     },
 
     viewopencard:{
@@ -78,7 +78,9 @@ const styles= StyleSheet.create({
       width:"90%",
       height:"13%",
       borderRadius:16,
-      backgroundColor:"#eee",
+      justifyContent:'center',
+      alignItems:'center',
+      backgroundColor:"#6c6c6c",
       margin:10,
     },
     viewbtns:{

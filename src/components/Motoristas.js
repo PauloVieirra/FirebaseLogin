@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
-import firebase from '../../services/firebaseConnection';
-import Listagem from '../../services/Listagem';
+import firebase from '../services/firebaseConnection';
+import Listagem from '../services/Listagem';
 
 
 
@@ -14,10 +14,10 @@ export default function components() {
 
         async function dados(){
 
-          await firebase.database().ref('amigao').on('value', (snapshot)=> {
-            
+          firebase.database().ref('amigao').on('value', (snapshot) => {
+
             setUsuarios([]);
-            
+
             snapshot.forEach((chilItem) => {
               let data = {
                 key: chilItem.key,
@@ -28,7 +28,7 @@ export default function components() {
 
               setUsuarios(oldArray => [...oldArray, data]);
               console.log(data);
-            })
+            });
 
           })
 

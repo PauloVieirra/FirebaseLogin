@@ -1,13 +1,6 @@
 {
   "expo": {
-    "plugins": [
-      [
-        "expo-ads-admob",
-        {
-          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
-        }
-      ]
-    ],
+    
     "name": "osk",
     "slug": "osk",
     "version": "1.0.0",
@@ -43,6 +36,22 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+
+    "plugins": [
+      
+      [ 
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
+
+
+
+
+
+
   }
 }
